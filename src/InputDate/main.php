@@ -30,9 +30,11 @@
             // --------------------------------------------------------------------------------
             render() {
                 return (
-                    <span>
-                        <InputDate name="happyDate" />
-                    </span>
+                    <div>
+                        <div>
+                            <InputDate name="happyDate" />
+                        </div>
+                    </div>
                 );
             },
         });

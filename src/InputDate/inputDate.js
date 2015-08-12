@@ -54,9 +54,8 @@ let InputDate = React.createClass({
 
         // 輸入 ↓ 的時候, 要跳到 ComboBox, 並且預選第一個項目
         if ( event.keyCode == 40 && this.state.combobox.options.length > 0 ) {
-            let refName = this.getUniqueId('-combobox')
-            React.findDOMNode(this.refs[refName]).focus();
-            React.findDOMNode(this.refs[refName]).selectedIndex = 0;
+            React.findDOMNode(this.refs.box).focus();
+            React.findDOMNode(this.refs.box).selectedIndex = 0;
         }
         // 輸入 8 個數字時
         else if( event.target.value.length == 8 && -1 === event.target.value.indexOf('-') ) {
@@ -116,11 +115,10 @@ let InputDate = React.createClass({
     // render
     // --------------------------------------------------------------------------------
     render() {
-        let boxRef = this.getUniqueId('-combobox');
         return (
             <span>
                 <input type="text" name={this.props.name} ref={this.props.name} onKeyUp={this.handleKey} maxLength="10" placeholder="yyyy-mm-dd" />
-                <ComboBox data={this.state.combobox} ref={boxRef} />
+                <ComboBox data={this.state.combobox} ref="box" />
             </span>
         );
     },
