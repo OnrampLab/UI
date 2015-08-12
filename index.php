@@ -2,7 +2,7 @@
     header('Content-Type: text/html; charset=utf-8');
     define('BASE_PATH',__DIR__);
     include 'lib/helper.php';
-    
+
     $mainPage = get('m', 'Home');
     $subPage  = get('s');
 ?><!DOCTYPE html>
@@ -70,10 +70,7 @@
 
     function getContent( $mainPage, $subPage )
     {
-        $path = null;
-        //if ( $mainPage && $subPage ) {
-            $path = getMenuPath($mainPage, $subPage);
-        //}
+        $path = getMenuPath($mainPage, $subPage);
         if ( $path ) {
             $file = $path.'/main.php';
             if (file_exists($file)) {
