@@ -20,6 +20,8 @@
     <script src="dist/react-0.13.3/build/react.js"></script>
     <script src="dist/react-0.13.3/build/JSXTransformer.js"></script>
     <script src="dist/react-bootstrap/react-bootstrap.min.js"></script>
+
+    <script src="dist/utils.js"></script>
   </head>
   <body>
 
