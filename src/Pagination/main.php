@@ -9,7 +9,6 @@
             // --------------------------------------------------------------------------------
             page(n) {
                 console.log('click page '+n);
-                //console.log( this.state.pageLimit.page );
             },
 
             getPageLimit() {
@@ -24,6 +23,8 @@
                 getData = {
                     page: 1,
                     rowCount: 30,
+                    prev: false,
+                    next: false,
                 };
                 this.setState({pageLimit: getData});
             },
@@ -32,9 +33,9 @@
                 // 假設是 ajax 的過程
                 getData = {
                     page: 4,
-                    rowCount: 100,
-                    prev: false,
-                    next: false,
+                    rowCount: 160,
+                    first: true,
+                    last: true,
                 };
                 this.setState({pageLimit: getData});
             },
@@ -53,14 +54,14 @@
                             <Pagination data={this.state.pageLimit} handlePage={this.page} />
                         </nav>
                         <p>
-                            <ReactBootstrap.Button bsStyle='primary' onClick={this.getPageLimit2}>
+                            <button className="btn btn-primary" onClick={this.getPageLimit2}>
                                 ajax 2
-                            </ReactBootstrap.Button>
+                            </button>
                             &nbsp;&nbsp;
 
-                            <ReactBootstrap.Button bsStyle='primary' onClick={this.getPageLimit3}>
+                            <button className="btn btn-primary" onClick={this.getPageLimit3}>
                                 ajax 3
-                            </ReactBootstrap.Button>
+                            </button>
                         </p>
                     </section>
                 );
@@ -68,4 +69,38 @@
         });
         React.render(<Main />, document.getElementById('content'));
     </script>
+
+<?php
+$output = <<<'EOD'
+<Pagination data={this.state.pageLimit} handlePage={this.page} />
+
+Example:
+
+    {
+        pageLimit: {
+            page: 1,
+            rowCount: 260,
+        }
+    }
+
+    {
+        pageLimit: {
+            page: 1,
+            rowCount: 30,
+            prev: false,
+            next: false,
+        }
+    }
+
+    {
+        pageLimit: {
+            page: 4,
+            rowCount: 160,
+            first: true,
+            last: true,
+        }
+    }
+EOD;
+outputCode($output);
+?>
 

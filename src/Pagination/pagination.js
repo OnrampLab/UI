@@ -1,15 +1,5 @@
 'use strict';
 
-/**
- *  Pagination
- *
- *      params:
- *          pageLimit: { page: 1, rowCount: 120 }
- *
- *      code:
- *          <Pagination data={this.state.pageLimit} handlePage={this.page} />
- *
- */
 let Pagination = React.createClass({
     propTypes: {
         handlePage: React.PropTypes.func,
@@ -41,7 +31,7 @@ let Pagination = React.createClass({
             prev: true,
             next: true,
             first: false,
-            last: true,
+            last: false,
             gap: 5,             // 顯示5個  << < 1 2 3 4 5 > >>
         };
 

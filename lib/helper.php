@@ -84,4 +84,7 @@
         return null;
     }
 
+    function outputCode($code) {
+        echo '<pre>'. htmlspecialchars($code) .'</pre>';
+    }
 
