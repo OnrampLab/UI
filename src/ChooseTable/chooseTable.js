@@ -31,21 +31,10 @@ let ChooseTable = React.createClass({
     /**
      *  每次 "新" 產生的元件, unique id 將會不同
      */
-    uniqueId: null,
-    getUniqueId(prefix) {
-        if ( !this.uniqueId ) {
-            let s4 = function() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-            this.uniqueId = s4()+s4()+'-'+s4()+s4();
-        }
-        return prefix + this.uniqueId;
-    },
+    uniqueId: utils.getUniqueId(),
 
     getChooseId() {
-        return this.getUniqueId('table-choose-');
+        return 'table-choose-' + this.uniqueId;
     },
 
     resetOther() {

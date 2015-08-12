@@ -27,22 +27,6 @@ let InputDate = React.createClass({
     // helper
     // --------------------------------------------------------------------------------
 
-    /**
-     *  每次 "新" 產生的元件, unique id 將會不同
-     */
-    uniqueId: null,
-    getUniqueId(prefix) {
-        if ( !this.uniqueId ) {
-            let s4 = function() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-            this.uniqueId = s4()+s4()+'-'+s4()+s4();
-        }
-        return prefix + this.uniqueId;
-    },
-
     // --------------------------------------------------------------------------------
     // event
     // --------------------------------------------------------------------------------
@@ -167,16 +151,9 @@ let ComboBox = React.createClass({
     /**
      *  每次 "新" 產生的元件, unique id 將會不同
      */
-    uniqueId: null,
+    uniqueId: utils.getUniqueId(),
+
     getUniqueId(prefix) {
-        if ( !this.uniqueId ) {
-            let s4 = function() {
-                return Math.floor((1 + Math.random()) * 0x10000)
-                    .toString(16)
-                    .substring(1);
-            }
-            this.uniqueId = s4()+s4()+'-'+s4()+s4();
-        }
         return prefix + this.uniqueId;
     },
 
