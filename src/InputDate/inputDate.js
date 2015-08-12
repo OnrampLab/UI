@@ -47,20 +47,38 @@ let InputDate = React.createClass({
     // event
     // --------------------------------------------------------------------------------
     handleKey: function(event) {
-        //console.log(event.type, event.keyCode, event.which, event.timeStamp, event.target.value);
 
         // update combobox width
         let $inputBox = $('input[name="'+ this.props.name +'"]');
         this.state.combobox.width = $inputBox.css('width');
 
+        // 輸入 ↓ 的時候, 要跳到 ComboBox, 並且預選第一個項目
+        if ( event.keyCode == 40 && this.state.combobox.options.length > 0 ) {
+            let refName = this.getUniqueId('-combobox')
+            React.findDOMNode(this.refs[refName]).focus();
+            React.findDOMNode(this.refs[refName]).selectedIndex = 0;
+        }
         // 輸入 8 個數字時
-        if( event.target.value.length == 8 && -1 === event.target.value.indexOf('-') ) {
+        else if( event.target.value.length == 8 && -1 === event.target.value.indexOf('-') ) {
 
-            let result = event.target.value.substr(0,4)
+            let result = '';
+            let guess = parseInt(event.target.value.substr(0,2));
+            if ( guess >= 19 ) {
+                // guess yyyymmdd
+                result = event.target.value.substr(0,4)
                        + '-'
                        + event.target.value.substr(4,2)
                        + '-'
                        + event.target.value.substr(6,2)
+            }
+            else {
+                // guess mmddyyyy
+                result = event.target.value.substr(4,4)
+                       + '-'
+                       + event.target.value.substr(0,2)
+                       + '-'
+                       + event.target.value.substr(2,2)
+            }
 
             this.state.combobox.options = [
                 [result,result]
@@ -98,10 +116,11 @@ let InputDate = React.createClass({
     // render
     // --------------------------------------------------------------------------------
     render() {
+        let boxRef = this.getUniqueId('-combobox');
         return (
             <span>
-                <input type="text" name={this.props.name} className="" onKeyUp={this.handleKey} maxLength="10" placeholder="yyyy-mm-dd" />
-                <ComboBox data={this.state.combobox} />
+                <input type="text" name={this.props.name} ref={this.props.name} onKeyUp={this.handleKey} maxLength="10" placeholder="yyyy-mm-dd" />
+                <ComboBox data={this.state.combobox} ref={boxRef} />
             </span>
         );
     },
@@ -166,10 +185,18 @@ let ComboBox = React.createClass({
     // --------------------------------------------------------------------------------
     // event
     // --------------------------------------------------------------------------------
-    handSelect: function(event) {
-        // console.log( event.target.value );
+    handKey: function(event) {
+        // console.log(event.type, event.keyCode, event.which, event.timeStamp, event.target.value);
+        if ( event.keyCode==13 ) {
+            let $inputBox = $('input[name="'+ this.state.actionName +'"]');
+            // TODO: 這應該是錯誤的寫法!! 請更正!!
+            $inputBox.val( event.target.value );
+            this.setState({options:[]});
+        }
+    },
+
+    handClick: function(event) {
         let $inputBox = $('input[name="'+ this.state.actionName +'"]');
-        
         // TODO: 這應該是錯誤的寫法!! 請更正!!
         $inputBox.val( event.target.value );
         this.setState({options:[]});
@@ -195,7 +222,7 @@ let ComboBox = React.createClass({
         }
 
         return (
-            <select multiple style={selectStyle} size={selectSize} onChange={this.handSelect}>
+            <select style={selectStyle} size={selectSize} onKeyUp={this.handKey} onClick={this.handClick}>
                 {options.map(this.renderOption)}
             </select>
         );
