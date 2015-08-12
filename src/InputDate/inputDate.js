@@ -187,7 +187,9 @@ let ComboBox = React.createClass({
     // --------------------------------------------------------------------------------
     handKey: function(event) {
         // console.log(event.type, event.keyCode, event.which, event.timeStamp, event.target.value);
-        if ( event.keyCode==13 ) {
+        let ENTER_KEY = 13;
+
+        if ( event.keyCode == ENTER_KEY ) {
             let $inputBox = $('input[name="'+ this.state.actionName +'"]');
             // TODO: 這應該是錯誤的寫法!! 請更正!!
             $inputBox.val( event.target.value );
