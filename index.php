@@ -5,6 +5,9 @@
 
     $mainPage = get('m', 'Home');
     $subPage  = get('s');
+    if ( !$subPage ) {
+        $subPage = getDefaultSubMenu($mainPage);
+    }
 ?><!DOCTYPE html>
 <html>
   <head>
@@ -27,7 +30,11 @@
                     <ul class="nav navbar-nav">
                         <?php
                             foreach ( getMainMenu() as $name ) {
-                                echo '<li><a href="?m='. $name .'">'. $name .'</a></li>';
+                                $class='';
+                                if ( $mainPage == $name ) {
+                                    $class='active';
+                                }
+                                echo '<li class="'.$class.'"><a href="?m='. $name .'">'. $name .'</a></li>';
                             }
                         ?>
                     </ul>
@@ -44,13 +51,17 @@
                     <div class="panel-heading">
                         <h3 class="panel-title"></h3>
                     </div>
-                    <ul class="list-group">
+                    <div class="list-group">
                     <?php
                         foreach ( getSubMenu($mainPage) as $name ) {
-                            echo '<li class="list-group-item"><a href="?m='. $mainPage .'&s='. $name .'">'. $name .'</a></li>';
+                            $class='';
+                            if ( $subPage == $name ) {
+                                $class='active';
+                            }
+                            echo '<a class="list-group-item '. $class .'" href="?m='. $mainPage .'&s='. $name .'">'. $name .'</a></li>';
                         }
                     ?>
-                    </ul>
+                    </div>
                 </div>
 
             </div>

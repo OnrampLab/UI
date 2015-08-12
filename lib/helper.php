@@ -52,6 +52,19 @@
         return $subMenu;
     }
 
+    /**
+     *  取得第一個 main page 的 sub page
+     */
+    function getDefaultSubMenu( $mainPage )
+    {
+        foreach ( getConfig('menu') as $item ) {
+            if ( $item[0] == $mainPage ) {
+                return $item[1];
+            }
+        }
+        return null;
+    }
+
     function getMenuPath( $mainPage, $subPage, $isMatchOne=true )
     {
         $firstMatch = null;
