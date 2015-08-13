@@ -1,5 +1,5 @@
 <ul>
-    <li>Utils</li>
+    <li>utils</li>
     <ul>
         <li>該工具只用於 React Component</li>
         <li>"不要" 在 React Component 以外的地方使用</li>

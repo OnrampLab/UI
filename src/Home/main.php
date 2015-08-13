@@ -13,6 +13,7 @@
         <li>React-Bootstrap</li>
         <ul>
             <li><a target="_blank" href="https://github.com/react-bootstrap/react-bootstrap">compile</a></li>
+            <li><a target="_blank" href="http://react-bootstrap.github.io/components.html">document</a></li>
         </ul>
     </ul>
 </ul>
