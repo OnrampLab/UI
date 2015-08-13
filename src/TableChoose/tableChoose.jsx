@@ -48,8 +48,6 @@ let TableChoose = React.createClass({
             heads: [],
             // sort: [],    // by heads
             rows: [],
-            choose: true,
-            chooseMultiple: true,
         };
 
         for (let key in def) {
@@ -82,11 +80,6 @@ let TableChoose = React.createClass({
         let id = "#" + this.getChooseId();
         let value = $(id).val();
         let data = row[this.state.headKey].toString();
-
-        if ( !this.state.chooseMultiple ) {
-            $(id).val(data);
-            return;
-        }
 
         if ( !value ) {
             $(id).val(data);
@@ -139,9 +132,6 @@ let TableChoose = React.createClass({
      *  管理已點擊的 row 資訊
      */
     handleRowClick: function(index) {
-        if ( !this.state.choose ) {
-            return;
-        }
         this.rowClick(index);
         this.setState({});
     },
@@ -154,14 +144,12 @@ let TableChoose = React.createClass({
             return false;
         }
         let chooseId  = this.getChooseId();
-        let showClass = this.state.choose ? '' : 'table-striped';
-        showClass     += ' table table-condensed table-bordered';
         return (
             <span>
                 <p>
                     <input type="text" id={chooseId} name={chooseId} />
                 </p>
-                <table className={showClass}>
+                <table className="table table-condensed table-bordered table-hover">
                     <thead>
                         {this.state.heads.map(this.renderHead)}
                     </thead>
