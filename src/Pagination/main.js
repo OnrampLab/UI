@@ -18,34 +18,49 @@
 
         // 假設是 ajax 的過程
         getData2() {
-            this.setState({
+            let resetData = {
                 page: 1,
                 rowCount: 30,
                 prev: false,
                 next: false,
-            });
+            }
+            // 覆蓋, 不保留原有的 state 資料
+            this.setState({data: resetData});
         },
 
         // 假設是 ajax 的過程
         getData3() {
-            this.setState({
+            let resetData = {
                 page: 4,
                 rowCount: 160,
                 first: true,
                 last: true,
-            });
+            }
+            // 覆蓋, 不保留原有的 state 資料
+            this.setState({data: resetData});
+
+            /*
+                如果不覆蓋, 要保留, 做法如下
+                this.state.data.page     = 4;
+                this.state.data.rowCount = 160;
+                this.state.data.first    = true;
+                this.state.data.last     = true;
+                this.setState({data: this.state.data});
+            */
         },
 
         // --------------------------------------------------------------------------------
         getInitialState() {
-            return this.getData();
+            return {
+                data: this.getData()
+            };
         },
 
         render() {
             return (
                 <section>
                     <nav>
-                        <Pagination {...this.state} handlePage={this.page} />
+                        <Pagination data={this.state.data} handlePage={this.page} />
                     </nav>
                     <p>
                         <button className="btn btn-primary" onClick={this.getData2}>
