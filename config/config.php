@@ -4,7 +4,8 @@ return [
     'menu' => [
         ['Home',    'Description',  'src/Home'          ],
         ['Home',    'Utils',        'src/HomeUtils'     ],
-        ['Table',   'ChooseTable',  'src/ChooseTable'   ],
+        ['Table',   'TableShow',    'src/TableShow'     ],
+        ['Table',   'TableChoose',  'src/TableChoose'   ],
         ['Form',    'InputDate',    'src/InputDate'     ],
         ['Other',   'Pagination',   'src/Pagination'    ],
     ],
