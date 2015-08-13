@@ -6,33 +6,27 @@
 
 <?php
 $output = <<<'EOD'
-<Pagination data={this.state.pageLimit} handlePage={this.page} />
+<Pagination {...this.state} handlePage={this.page} />
 
 Example:
 
     {
-        pageLimit: {
-            page: 1,
-            rowCount: 260,
-        }
+        page: 1,
+        rowCount: 260,
     }
 
     {
-        pageLimit: {
-            page: 1,
-            rowCount: 30,
-            prev: false,
-            next: false,
-        }
+        page: 1,
+        rowCount: 30,
+        prev: false,
+        next: false,
     }
 
     {
-        pageLimit: {
-            page: 4,
-            rowCount: 160,
-            first: true,
-            last: true,
-        }
+        page: 4,
+        rowCount: 160,
+        first: true,
+        last: true,
     }
 EOD;
 outputCode($output);

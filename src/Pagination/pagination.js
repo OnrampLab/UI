@@ -6,14 +6,14 @@ let Pagination = React.createClass({
     },
 
     getInitialState() {
-        return this.getDefault( this.props.data );
+        return this.getDefault( this.props );
     },
 
     /**
      *  當一個掛載的組件接收到新的 props 的時候被調用
      */
     componentWillReceiveProps(nextProps) {
-        this.state = this.getDefault( nextProps.data );
+        this.state = this.getDefault( nextProps );
     },
 
     // --------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ let Pagination = React.createClass({
      *  總共幾頁
      */
     getTotalPage() {
-        return Math.round(this.state.rowCount / this.state.pageShowCount);
+        return Math.ceil(this.state.rowCount / this.state.pageShowCount);
     },
 
     /**
