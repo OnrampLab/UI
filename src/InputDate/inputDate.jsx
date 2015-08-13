@@ -4,7 +4,6 @@
  *  InputDate
  *
  *      params:
- *          
  *
  *      code:
  *          <InputDate name="birthDate" />

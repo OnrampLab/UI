@@ -1,7 +1,7 @@
 
     <div id="content"></div>
 
-    <script type="text/jsx" src="src/Pagination/pagination.js"></script>
+    <script type="text/jsx" src="src/Pagination/pagination.jsx"></script>
     <script type="text/jsx" src="src/Pagination/main.js"></script>
 
 <?php
