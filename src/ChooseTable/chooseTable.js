@@ -1,15 +1,5 @@
 'use strict';
 
-/**
- *  Table
- *
- *      params:
- *          table: { heads: ['name','age'], rows: [] }
- *
- *      code:
- *          <ChooseTable data={this.state.table} />
- *
- */
 let ChooseTable = React.createClass({
 
     getInitialState() {
