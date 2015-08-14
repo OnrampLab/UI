@@ -17,6 +17,8 @@
     <script src="dist/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
     <link rel="stylesheet" href="dist/bootstrap-3.3.5-dist/css/bootstrap.min.css" />
 
+    <link rel="stylesheet" href="dist/font-awesome-4.4.0/css/font-awesome.css" />
+
     <script src="dist/react-0.13.3/build/react.js"></script>
     <script src="dist/react-0.13.3/build/JSXTransformer.js"></script>
     <script src="dist/react-bootstrap/react-bootstrap.min.js"></script>
@@ -60,7 +62,7 @@
                             if ( $subPage == $name ) {
                                 $class='active';
                             }
-                            echo '<a class="list-group-item '. $class .'" href="?m='. $mainPage .'&s='. $name .'">'. $name .'</a></li>';
+                            echo '<a class="list-group-item '. $class .'" href="?m='. $mainPage .'&s='. $name .'">'. $name .'</a>';
                         }
                     ?>
                     </div>
