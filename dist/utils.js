@@ -11,9 +11,9 @@
                     .substring(1);
             }
             if ( !prefix ) {
-                return s4() + s4() + '-' + s4() + s4();
+                return s4() + s4() + s4() + s4();
             }
-            return prefix + s4() + s4() + '-' + s4() + s4();
+            return prefix + s4() + s4() + s4() + s4();
         },
     
     };
