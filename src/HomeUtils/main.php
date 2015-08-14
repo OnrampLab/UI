@@ -34,3 +34,29 @@
     </p>
 
 </div>
+
+<hr />
+
+<pre>
+var obj = {
+    name: 'john',
+    birth: '2000-01-01',
+    age: 12
+}
+utils.each(obj, function(key, value){ 
+    console.log( key, value );
+})
+</pre>
+
+<pre>
+var list = [
+    'john',
+    '2000-01-01',
+    12
+];
+utils.each(list, function(key, value){ 
+    console.log( key, value );
+})
+</pre>
+
+
