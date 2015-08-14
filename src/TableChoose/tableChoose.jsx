@@ -21,17 +21,6 @@ let TableChoose = React.createClass({
         this.resetAllCheckbox();
     },
 
-    resetAllCheckbox()
-    {
-        let headKey = this.state.headKey;
-        let that = this;
-        let key;
-        utils.each( this.state.rows, function(index, obj) {
-            key = obj[headKey];
-            that.setCheckbox(key, false);
-        });
-    },
-
     /**
      *  在更新發生之後調用
      */
@@ -39,13 +28,12 @@ let TableChoose = React.createClass({
     },
 
     // --------------------------------------------------------------------------------
-    // store
+    // item checkbox store
     // --------------------------------------------------------------------------------
     /**
      *  manager checkbox
      */
     getCheckbox( key, defaultValue ) {
-        this.state.saveCheckbox = this.state.saveCheckbox || {};
         key = key.toString();
         if( typeof(this.state.saveCheckbox[key.toString()]) == "undefined" ) {
             return defaultValue ? defaultValue : null;
@@ -54,13 +42,112 @@ let TableChoose = React.createClass({
     },
     setCheckbox( key, value ) {
         key = key.toString();
-        this.state.saveCheckbox = this.state.saveCheckbox || {};
         this.state.saveCheckbox[key.toString()] = value;
         this.setState({saveCheckbox: this.state.saveCheckbox});
+        this.updateControlIcon();
     },
     getAllCheckbox() {
-        this.state.saveCheckbox = this.state.saveCheckbox || {};
         return this.state.saveCheckbox;
+    },
+    /**
+     *  row checkbox 是否 全部都選
+     */
+    isAllCheck() {
+        if ( !this.state.saveCheckbox ) {
+            return false;
+        }
+        let result = true;
+        utils.each( this.state.saveCheckbox, function(key, value) {
+            if ( value !== true ) {
+                result = false;
+                return false; // is break
+            }
+        });
+        return result;
+    },
+    /**
+     *  row checkbox 是否 全部沒有選
+     */
+    isAllNotCheck() {
+        if ( !this.state.saveCheckbox ) {
+            return false;
+        }
+        let result = true;
+        utils.each( this.state.saveCheckbox, function(key, value) {
+            if ( value !== false ) {
+                result = false;
+                return false; // is break
+            }
+        });
+        return result;
+    },
+
+    // --------------------------------------------------------------------------------
+    // control checkbox store
+    // --------------------------------------------------------------------------------
+    /**
+     *  get control checkbox icon
+     *
+     *  0 沒有任何點擊  的圖示  -> 囗
+     *  1 部份點擊      的圖示  -> 囗 + 一
+     *  2 全點擊圖      的圖示  -> 囗 + Ｖ
+     *
+     */
+    getControlClassName()
+    {
+        switch ( this.state.saveControlCheckbox ) {
+            case 1:  return 'fa fa-lg fa-minus-square-o';
+            case 2:  return 'fa fa-lg fa-check-square';
+            default: return 'fa fa-lg fa-square-o';
+        }
+    },
+
+    /**
+     *  依照現在 item checkbox 的狀態, 改變 control icon 
+     */
+    updateControlIcon()
+    {
+        if ( this.isAllCheck() ) {
+            this.state.saveControlCheckbox = 2;
+        }
+        else if ( this.isAllNotCheck() ) {
+            this.state.saveControlCheckbox = 0;
+        }
+        else {
+            this.state.saveControlCheckbox = 1;
+        }
+        this.setState({saveControlCheckbox: this.state.saveControlCheckbox});
+    },
+
+    /**
+     *  依照現在 control icon 的狀態, 在點擊該 icon 之後
+     *  必須對 item checkbox 做狀態的變更
+     *
+     *  0 沒有任何點擊  的圖示 -> 全選取
+     *  1 部份點擊      的圖示 -> 全取消
+     *  2 全點擊圖      的圖示 -> 全取消
+     *
+     *  @return boolean
+     */
+    clickControlIcon()
+    {
+        let control;
+        switch ( this.state.saveControlCheckbox ) {
+            case 1:
+            case 2:
+                this.state.saveControlCheckbox = 0;
+                control = false;
+                break;
+            default:
+                this.state.saveControlCheckbox = 2;
+                control = true;
+        }
+        this.setState({saveControlCheckbox: this.state.saveControlCheckbox});
+
+        let that = this;
+        utils.each( this.getAllCheckbox(), function(key, value) {
+            that.setCheckbox( key, control );
+        });
     },
 
     // --------------------------------------------------------------------------------
@@ -85,12 +172,14 @@ let TableChoose = React.createClass({
      */
     getDefault(params) {
         let def = {
-            id: '',         // table id="?"
-            headKey: '',    // by heads, 一般來說會是放置資料的主鍵 'id'
+            headKey: '',            // by heads, 一般來說會是放置資料的主鍵 'id'
             heads: [],
-            // sort: [],    // by heads
+         // sort: [],               // by heads
             rows: [],
             showFoot: true,
+            // 內部
+            saveCheckbox: {},       // 儲存 checkbox item
+            saveControlCheckbox: 0, // 控制 checkbox all 的功能
         };
 
         for (let key in def) {
@@ -99,6 +188,17 @@ let TableChoose = React.createClass({
             }
         }
         return def;
+    },
+
+    resetAllCheckbox()
+    {
+        let headKey = this.state.headKey;
+        let that = this;
+        let key;
+        utils.each( this.state.rows, function(index, obj) {
+            key = obj[headKey];
+            that.setCheckbox(key, false);
+        });
     },
 
     validate() {
@@ -125,11 +225,8 @@ let TableChoose = React.createClass({
         this.setCheckbox(key, event.target.checked);
     },
 
-    handleCheckAll: function(event) {
-        let that = this;
-        utils.each( this.getAllCheckbox(), function(key, value) {
-            that.setCheckbox( key, event.target.checked );
-        });
+    handleCheckAll: function() {
+        this.clickControlIcon();
     },
 
     // --------------------------------------------------------------------------------
@@ -159,11 +256,15 @@ let TableChoose = React.createClass({
                 </tr>
             );
         }
+
+        let icon = this.getControlClassName();
         return (
             <span>
                 <table className="table table-condensed table-bordered table-hover">
                     <thead>
-                        <th style={style}><input type="checkbox" onChange={this.handleCheckAll} /></th>
+                        <th style={style}>
+                            <i className={icon} onClick={this.handleCheckAll}></i>
+                        </th>
                         {this.state.heads.map(this.renderHead)}
                     </thead>
                     <tbody>
