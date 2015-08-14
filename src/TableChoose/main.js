@@ -8,7 +8,7 @@
         getRows() {
             return {
                 headKey: 'id',
-                heads: ['name','price','stocked'],
+                heads: ['name','price','age'],
                 rows: [
                         { id: 11, name: "Football",    price: 49.99,  age: 11,                      },
                         { id: 12, name: "Baseball",    price: 9.99,   age: 20,                      },
@@ -22,22 +22,12 @@
 
         // 假設是 ajax 的過程
         getRows2() {
-            var table = this.state.table;
-            /*
-                table.heads = ['name','price'];
-                ->
-                Uncaught Error: Invariant Violation: processUpdates(): Unable to find child 2 of element.
-                This probably means the DOM was unexpectedly mutated (e.g., by the browser),
-                usually due to forgetting a <tbody> when using tables, nesting tags like <form>, <p>, or <a>,
-                or using non-SVG elements in an <svg> parent.
-                Try inspecting the child nodes of the element with React ID `.0.0.1.0`.
-            */
-            table.rows = [
+            this.state.table.rows = [
                 { id: 12, name: "iPhone 5",   price: 199,   age: 12 },
                 { id: 13, name: "iPhone 6",   price: 299,   age: 33 },
                 { id: 14, name: "iPhone 6s",  price: 399,   age: 80 },
             ];
-            this.setState({"table": table});
+            this.setState({"table": this.state.table});
         },
 
         // --------------------------------------------------------------------------------

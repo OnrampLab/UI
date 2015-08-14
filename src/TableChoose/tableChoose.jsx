@@ -11,30 +11,52 @@ let TableChoose = React.createClass({
      */
     componentWillReceiveProps(nextProps) {
         this.state = this.getDefault( nextProps.data );
-        this.resetOther();
+
+        // reset other
+        // TODO: 該方式應該是錯的, 請察明後修正!!
+        $('input[type="checkbox"]').each(function(){
+            $(this).attr('checked',false)
+        });
+    },
+
+    /**
+     *  在更新發生之後調用
+     */
+    componentDidUpdate() {
+    },
+
+    // --------------------------------------------------------------------------------
+    // store
+    // --------------------------------------------------------------------------------
+    /**
+     *  manager checkbox
+     */
+    getCheckbox(key, defaultValue ) {
+        this.state.saveCheckbox = this.state.saveCheckbox || [];
+        if( typeof(this.state.saveCheckbox[key]) == "undefined" ) {
+            return defaultValue ? defaultValue : null;
+        }
+        return this.state.saveCheckbox[key];
+    },
+    setCheckbox(key, value) {
+        this.state.saveCheckbox = this.state.saveCheckbox || [];
+        this.state.saveCheckbox[key] = value;
     },
 
     // --------------------------------------------------------------------------------
     // helper
     // --------------------------------------------------------------------------------
-
     /**
      *  每次 "新" 產生的元件, unique id 將會不同
      */
-    uniqueId: utils.getUniqueId(),
+    // uniqueId: utils.getUniqueId(),
 
-    getChooseId() {
-        return 'table-choose-' + this.uniqueId;
-    },
-
-    resetOther() {
-        // clear choose
-        var id = "#" + this.getChooseId();
-        if ( $(id).length > 0 ) {
-            $(id).val('');
+    getRowKey(index)
+    {
+        if ( !this.state.rows[index] ) {
+            return null;
         }
-
-        //
+        return this.state.rows[index][this.state.headKey].toString();
     },
 
     /**
@@ -73,67 +95,18 @@ let TableChoose = React.createClass({
     },
 
     // --------------------------------------------------------------------------------
-    // manager row click
-    // --------------------------------------------------------------------------------
-    rowClick: function(index) {
-        let row = this.state.rows[index];
-        let id = "#" + this.getChooseId();
-        let value = $(id).val();
-        let data = row[this.state.headKey].toString();
-
-        if ( !value ) {
-            $(id).val(data);
-        }
-        else {
-            let items = value.split(',');
-            let find = items.indexOf(data);
-            if ( -1 == find ) {
-                items.push(data);
-            }
-            else {
-                items.splice(find, 1);
-            }
-            value = items.join(",");
-            $(id).val(value);
-        }
-    },
-
-    hasRowActive: function(index) {
-        let id = "#" + this.getChooseId();
-        if ( $(id).length <= 0 ) {
-            return false;
-        }
-        let row = this.state.rows[index];
-        let key = row[this.state.headKey].toString();
-        let value = $(id).val();
-        let items = value.split(',');
-
-        if ( -1 == items.indexOf(key) ) {
-            return false;
-        }
-        return true;
-    },
-
-    // --------------------------------------------------------------------------------
     // event
     // --------------------------------------------------------------------------------
     /**
-     *  提供給外界處理 row
-     */
-    handleRow: function(row) {
-        // custom event
-        if (this.props.handleRow) {
-            row = this.props.handleRow(row);
-        }
-        return row;
-    },
-
-    /**
      *  管理已點擊的 row 資訊
      */
-    handleRowClick: function(index) {
-        this.rowClick(index);
-        this.setState({});
+    handleCheck: function(key, event) {
+        this.setCheckbox(key, event.target.checked);
+        this.setState(this.state);
+    },
+
+    handleCheckAll: function(event) {
+        console.log(event.target.checked);
     },
 
     // --------------------------------------------------------------------------------
@@ -143,14 +116,14 @@ let TableChoose = React.createClass({
         if ( !this.validate() ) {
             return false;
         }
-        let chooseId  = this.getChooseId();
+        let style = {
+            "width":"20px"
+        };
         return (
             <span>
-                <p>
-                    <input type="text" id={chooseId} name={chooseId} />
-                </p>
                 <table className="table table-condensed table-bordered table-hover">
                     <thead>
+                        <th style={style}><input type="checkbox" onChange={this.handleCheckAll} /></th>
                         {this.state.heads.map(this.renderHead)}
                     </thead>
                     <tbody>
@@ -162,11 +135,12 @@ let TableChoose = React.createClass({
     },
 
     renderRow: function(row, i) {
-        row = this.handleRow(row);
-        let data = this._sortRowByHeadToArray(row, this.state.heads);
-        let color = this.hasRowActive(i) ? 'info' : '';
+        let key     = this.getRowKey(i);
+        let data    = this._sortRowByHeadToArray(row, this.state.heads);
+        let color   = this.getCheckbox(key) ? 'info' : '';
         return (
-            <tr key={i} className={color} onClick={this.handleRowClick.bind(this,i)}>
+            <tr key={i} className={color}>
+                <td><input type="checkbox" key={i} onChange={this.handleCheck.bind(this,key)} /></td>
                 {data.map(this.renderCell)}
             </tr>
         );
