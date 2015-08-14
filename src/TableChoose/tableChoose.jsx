@@ -11,11 +11,24 @@ let TableChoose = React.createClass({
      */
     componentWillReceiveProps(nextProps) {
         this.state = this.getDefault( nextProps.data );
+        this.resetAllCheckbox();
+    },
 
-        // reset other
-        // TODO: 該方式應該是錯的, 請察明後修正!!
-        $('input[type="checkbox"]').each(function(){
-            $(this).attr('checked',false)
+    /**
+     *  在掛載結束之後馬上被調用。需要DOM節點的初始化操作應該放在這里
+     */
+    componentDidMount() {
+        this.resetAllCheckbox();
+    },
+
+    resetAllCheckbox()
+    {
+        let headKey = this.state.headKey;
+        let that = this;
+        let key;
+        utils.each( this.state.rows, function(index, obj) {
+            key = obj[headKey];
+            that.setCheckbox(key, false);
         });
     },
 
@@ -31,16 +44,23 @@ let TableChoose = React.createClass({
     /**
      *  manager checkbox
      */
-    getCheckbox(key, defaultValue ) {
-        this.state.saveCheckbox = this.state.saveCheckbox || [];
-        if( typeof(this.state.saveCheckbox[key]) == "undefined" ) {
+    getCheckbox( key, defaultValue ) {
+        this.state.saveCheckbox = this.state.saveCheckbox || {};
+        key = key.toString();
+        if( typeof(this.state.saveCheckbox[key.toString()]) == "undefined" ) {
             return defaultValue ? defaultValue : null;
         }
-        return this.state.saveCheckbox[key];
+        return this.state.saveCheckbox[key.toString()];
     },
-    setCheckbox(key, value) {
-        this.state.saveCheckbox = this.state.saveCheckbox || [];
-        this.state.saveCheckbox[key] = value;
+    setCheckbox( key, value ) {
+        key = key.toString();
+        this.state.saveCheckbox = this.state.saveCheckbox || {};
+        this.state.saveCheckbox[key.toString()] = value;
+        this.setState({saveCheckbox: this.state.saveCheckbox});
+    },
+    getAllCheckbox() {
+        this.state.saveCheckbox = this.state.saveCheckbox || {};
+        return this.state.saveCheckbox;
     },
 
     // --------------------------------------------------------------------------------
@@ -70,6 +90,7 @@ let TableChoose = React.createClass({
             heads: [],
             // sort: [],    // by heads
             rows: [],
+            showFoot: true,
         };
 
         for (let key in def) {
@@ -98,15 +119,17 @@ let TableChoose = React.createClass({
     // event
     // --------------------------------------------------------------------------------
     /**
-     *  管理已點擊的 row 資訊
+     *  管理點擊的 row 資訊
      */
     handleCheck: function(key, event) {
         this.setCheckbox(key, event.target.checked);
-        this.setState(this.state);
     },
 
     handleCheckAll: function(event) {
-        console.log(event.target.checked);
+        let that = this;
+        utils.each( this.getAllCheckbox(), function(key, value) {
+            that.setCheckbox( key, event.target.checked );
+        });
     },
 
     // --------------------------------------------------------------------------------
@@ -117,8 +140,25 @@ let TableChoose = React.createClass({
             return false;
         }
         let style = {
-            "width":"20px"
+            "width": "20px"
         };
+
+        let foot = null;
+        if ( this.state.showFoot ) {
+            let numChoose = 0;
+            utils.each( this.getAllCheckbox(), function(key, value) {
+                if ( value === true ) {
+                    numChoose++;
+                }
+            });
+            foot = (
+                <tr>
+                    <td colSpan={this.state.heads.length+1} className="text-right">
+                        Choose {numChoose}
+                    </td>
+                </tr>
+            );
+        }
         return (
             <span>
                 <table className="table table-condensed table-bordered table-hover">
@@ -129,6 +169,9 @@ let TableChoose = React.createClass({
                     <tbody>
                         {this.state.rows.map(this.renderRow)}
                     </tbody>
+                    <tfoot>
+                    {foot}
+                    </tfoot>
                 </table>
             </span>
         );
@@ -140,7 +183,11 @@ let TableChoose = React.createClass({
         let color   = this.getCheckbox(key) ? 'info' : '';
         return (
             <tr key={i} className={color}>
-                <td><input type="checkbox" key={i} onChange={this.handleCheck.bind(this,key)} /></td>
+                <td><input
+                        type="checkbox"
+                        key={i}
+                        onChange={this.handleCheck.bind(this,key)}
+                        checked={this.getCheckbox(key)} /></td>
                 {data.map(this.renderCell)}
             </tr>
         );
