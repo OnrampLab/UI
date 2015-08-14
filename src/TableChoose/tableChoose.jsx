@@ -243,15 +243,17 @@ let TableChoose = React.createClass({
         let foot = null;
         if ( this.state.showFoot ) {
             let numChoose = 0;
+            let chooseKeys = [];
             utils.each( this.getAllCheckbox(), function(key, value) {
                 if ( value === true ) {
                     numChoose++;
+                    chooseKeys.push(key)
                 }
             });
             foot = (
                 <tr>
                     <td colSpan={this.state.heads.length+1} className="text-right">
-                        Choose {numChoose}
+                        Choose ({numChoose}) | Keys ('{chooseKeys.join(',')}')
                     </td>
                 </tr>
             );
