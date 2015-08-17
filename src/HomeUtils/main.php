@@ -6,57 +6,110 @@
     </ul>
 </ul>
 
+<style>
+    pre.display {
+        background-color: #ffffff;
+        border: 0px;
+        display: none;
+    }
+</style>
 <script>
     "use strict";
 
+    var message = '';
+    function echo(msg)
+    {
+        var tmp = '';
+        for ( var i = 0; i < arguments.length; i++) {
+            if ( '' === tmp ) {
+                tmp = arguments[i];
+            }
+            else {
+                tmp += ' ' + arguments[i];
+            }
+        }
+        if ( !message ) {
+            message = tmp;
+        }
+        else {
+            message += "\n" + tmp;
+        }
+    }
+
+    function output()
+    {
+        var output = message;
+        message = '';
+        return output;
+    }
+
     $(function() {
-        $(".viewCodes p").each(function(){
-            var pre = $(this).next('pre');
-            var exec = 'return ' + pre.text();
-            var run = new Function(exec);
-            pre.next('span').text( run() );
+
+        $(".js-return").each(function(){
+            var that = this;
+            $(this).append('<input style="float:right" type="button" value="return" />');
+            $(this).children('input').on('click', function(){
+                var code = $(this).parent().text();
+                var run = new Function('return ' + code);
+                $(that).next('pre').css('display', 'block');
+                $(that).next('pre').text( run() );
+            });
         });
+
+        $(".js-show").each(function(){
+            var that = this;
+            $(this).append('<input style="float:right" type="button" value="show" />');
+            $(this).children('input').on('click', function(){
+                var code = $(this).parent().text();
+                var run = new Function(code);
+                run();
+                $(that).next('pre').css('display', 'block');
+                $(that).next('pre').text( output() );
+            });
+        });
+
     });
 
 </script>
 
 <hr />
-<div class="viewCodes">
+<div>
 
     <p>
-        <pre>utils.getUniqueId()</pre>
-        <span></span>
+        <pre class="js-return">utils.getUniqueId()</pre>
+        <pre class="display"></pre>
     </p>
 
     <p>
-        <pre>utils.getUniqueId('hello-')</pre>
-        <span></span>
+        <pre class="js-return">utils.getUniqueId('hello-')</pre>
+        <pre class="display"></pre>
     </p>
 
-</div>
-
-<hr />
-
-<pre>
+    <p>
+        <pre class="js-show">
 var obj = {
     name: 'john',
     birth: '2000-01-01',
-    age: 12
+    age: Math.floor(Math.random()*100 + 1)
 }
 utils.each(obj, function(key, value){ 
-    console.log( key, value );
-})
-</pre>
+    echo(key, value);
+})</pre>
+        <pre class="display"></pre>
+    </p>
 
-<pre>
+    <p>
+        <pre class="js-show">
 var list = [
     'john',
     '2000-01-01',
-    12
+    Math.floor(Math.random()*100 + 1)
 ];
 utils.each(list, function(key, value){ 
-    console.log( key, value );
-})
-</pre>
+    echo(key, value);
+})</pre>
+        <pre class="display"></pre>
+    </p>
 
+</div>
 
