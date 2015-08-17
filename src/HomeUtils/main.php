@@ -89,7 +89,7 @@
         <pre class="js-show">
 var obj = {
     name: 'john',
-    birth: '2000-01-01',
+    birth: new Date(Date.UTC(2000, 12-1, 31, 23, 59, 59)).toISOString(),
     age: Math.floor(Math.random()*100 + 1)
 }
 utils.each(obj, function(key, value){ 
