@@ -40,15 +40,18 @@ let TableChoose = React.createClass({
         }
         return this.state.saveCheckbox[key.toString()];
     },
+
     setCheckbox( key, value ) {
         key = key.toString();
         this.state.saveCheckbox[key.toString()] = value;
         this.setState({saveCheckbox: this.state.saveCheckbox});
         this.updateControlIcon();
     },
+
     getAllCheckbox() {
         return this.state.saveCheckbox;
     },
+
     /**
      *  row checkbox 是否 全部都選
      */
@@ -65,6 +68,7 @@ let TableChoose = React.createClass({
         });
         return result;
     },
+
     /**
      *  row checkbox 是否 全部沒有選
      */
@@ -123,9 +127,9 @@ let TableChoose = React.createClass({
      *  依照現在 control icon 的狀態, 在點擊該 icon 之後
      *  必須對 item checkbox 做狀態的變更
      *
-     *  0 沒有任何點擊  的圖示 -> 全選取
-     *  1 部份點擊      的圖示 -> 全取消
-     *  2 全點擊圖      的圖示 -> 全取消
+     *  0 沒有任何點擊  的圖示 -> 2 全選取
+     *  1 部份點擊      的圖示 -> 0 全取消
+     *  2 全點擊圖      的圖示 -> 0 全取消
      *
      *  @return boolean
      */
@@ -153,11 +157,6 @@ let TableChoose = React.createClass({
     // --------------------------------------------------------------------------------
     // helper
     // --------------------------------------------------------------------------------
-    /**
-     *  每次 "新" 產生的元件, unique id 將會不同
-     */
-    // uniqueId: utils.getUniqueId(),
-
     getRowKey(index)
     {
         if ( !this.state.rows[index] ) {
@@ -172,11 +171,10 @@ let TableChoose = React.createClass({
      */
     getDefault(params) {
         let def = {
-            headKey: '',            // by heads, 一般來說會是放置資料的主鍵 'id'
+            headKey: '',            // by heads, 一般來說會是放置資料的主鍵 example 'id' 'email'
             heads: [],
          // sort: [],               // by heads
             rows: [],
-            showFoot: true,
             // 內部
             saveCheckbox: {},       // 儲存 checkbox item
             saveControlCheckbox: 0, // 控制 checkbox all 的功能
@@ -201,6 +199,22 @@ let TableChoose = React.createClass({
         });
     },
 
+    /**
+     *  引用者所需要的資訊
+     */
+    getInfo() {
+        let numChoose = 0;
+        utils.each( this.getAllCheckbox(), function(key, value) {
+            if ( value === true ) {
+                numChoose++;
+            }
+        });
+        return {
+            numChoose: numChoose,
+            chooseItems: this.getAllCheckbox(),
+        };
+    },
+
     validate() {
         if ( !this.state.headKey ) {
             console.log('table error: element headKey not found!');
@@ -223,6 +237,11 @@ let TableChoose = React.createClass({
      */
     handleCheck: function(key, event) {
         this.setCheckbox(key, event.target.checked);
+
+        if ( !this.props.data.listenCheck ) {
+            return;
+        }
+        this.props.data.listenCheck(key, event.target.checked);
     },
 
     handleCheckAll: function() {
@@ -240,25 +259,6 @@ let TableChoose = React.createClass({
             "width": "20px"
         };
 
-        let foot = null;
-        if ( this.state.showFoot ) {
-            let numChoose = 0;
-            let chooseKeys = [];
-            utils.each( this.getAllCheckbox(), function(key, value) {
-                if ( value === true ) {
-                    numChoose++;
-                    chooseKeys.push(key)
-                }
-            });
-            foot = (
-                <tr>
-                    <td colSpan={this.state.heads.length+1} className="text-right">
-                        Choose ({numChoose}) | Keys ('{chooseKeys.join(',')}')
-                    </td>
-                </tr>
-            );
-        }
-
         let icon = this.getControlClassName();
         return (
             <span>
@@ -272,9 +272,6 @@ let TableChoose = React.createClass({
                     <tbody>
                         {this.state.rows.map(this.renderRow)}
                     </tbody>
-                    <tfoot>
-                    {foot}
-                    </tfoot>
                 </table>
             </span>
         );
