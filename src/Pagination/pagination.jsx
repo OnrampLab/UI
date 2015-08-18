@@ -2,7 +2,7 @@
 
 let Pagination = React.createClass({
     propTypes: {
-        handlePage: React.PropTypes.func,
+        listenClick: React.PropTypes.func,
     },
 
     getInitialState() {
@@ -102,8 +102,8 @@ let Pagination = React.createClass({
         }
 
         // custom event
-        if (this.props.handlePage) {
-            this.props.handlePage(p);
+        if (this.props.listenClick) {
+            this.props.listenClick(p);
         }
 
         this.setState({page: p});

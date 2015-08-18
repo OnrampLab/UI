@@ -17,7 +17,6 @@
                         { id: 27, name: "iPhone 5",    price: 399.99, age: 5                        },
                         { id: 28, name: "Nexus 7",     price: 199.99, age: 90                       },
                 ],
-                listenCheck: this.showCheck,
             }
         },
 
@@ -32,12 +31,12 @@
         },
 
         showCheck(key, value) {
-            // console.log( this.refs.theTable.getInfo() );
+            // console.log( this.refs.myTable.getInfo() );
             console.log( key, value );
         },
 
         show() {
-            console.log( this.refs.theTable.getInfo() );
+            console.log( this.refs.myTable.getInfo() );
         },
 
         // --------------------------------------------------------------------------------
@@ -50,7 +49,7 @@
         render() {
             return (
                 <div>
-                    <TableChoose data={this.state.table} ref="theTable" />
+                    <TableChoose data={this.state.table} listenCheck={this.showCheck} ref="myTable" />
 
                     <button className="btn btn-primary" onClick={this.show}>
                         Show Information

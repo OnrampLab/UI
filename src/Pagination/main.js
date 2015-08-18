@@ -60,7 +60,7 @@
             return (
                 <section>
                     <nav>
-                        <Pagination data={this.state.data} handlePage={this.page} />
+                        <Pagination data={this.state.data} listenClick={this.page} />
                     </nav>
                     <p>
                         <button className="btn btn-primary" onClick={this.getData2}>

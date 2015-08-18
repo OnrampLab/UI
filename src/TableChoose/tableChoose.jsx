@@ -238,10 +238,10 @@ let TableChoose = React.createClass({
     handleCheck: function(key, event) {
         this.setCheckbox(key, event.target.checked);
 
-        if ( !this.props.data.listenCheck ) {
+        if ( !this.props.listenCheck ) {
             return;
         }
-        this.props.data.listenCheck(key, event.target.checked);
+        this.props.listenCheck(key, event.target.checked);
     },
 
     handleCheckAll: function() {
