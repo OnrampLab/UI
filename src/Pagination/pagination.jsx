@@ -17,7 +17,7 @@ let Pagination = React.createClass({
     },
 
     getInitialState() {
-        return this.getDefault( this.props );
+        return this.getDefault(this.props);
     },
 
     getDefaultProps: function() {
