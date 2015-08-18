@@ -31,7 +31,6 @@
         },
 
         showCheck(key, value) {
-            // console.log( this.refs.myTable.getInfo() );
             console.log( key, value );
         },
 

@@ -3,7 +3,7 @@
 let TableChoose = React.createClass({
 
     getInitialState() {
-        return this.getDefault( this.props );
+        return this.getDefault();
     },
 
     getDefaultProps: function() {
@@ -19,7 +19,7 @@ let TableChoose = React.createClass({
      *  當一個掛載的組件接收到新的 props 的時候被調用
      */
     componentWillReceiveProps(nextProps) {
-        this.state = this.getDefault( nextProps );
+        this.state = this.getDefault();
         this.resetAllCheckbox();
     },
 
@@ -41,23 +41,12 @@ let TableChoose = React.createClass({
     // --------------------------------------------------------------------------------
     /**
      *  取得預設值
-     *  如果參數中有相同的 key, 則覆蓋該值
      */
-    getDefault(params) {
-        let def = {
+    getDefault() {
+        return def = {
             saveCheckbox: {},       // 儲存 checkbox item
             saveControlCheckbox: 0, // 控制 checkbox all 的功能
         };
-        // 目前沒有需要覆蓋的值
-
-        /*
-        for (let key in def) {
-            if( typeof(params[key])!=="undefined" ) {
-                def[key] = params[key];
-            }
-        }
-        */
-        return def;
     },
 
     // --------------------------------------------------------------------------------
