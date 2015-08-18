@@ -43,7 +43,7 @@ let TableChoose = React.createClass({
      *  取得預設值
      */
     getDefault() {
-        return def = {
+        return {
             saveCheckbox: {},       // 儲存 checkbox item
             saveControlCheckbox: 0, // 控制 checkbox all 的功能
         };
