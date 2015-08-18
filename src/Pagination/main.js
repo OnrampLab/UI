@@ -6,13 +6,13 @@
         // event
         // --------------------------------------------------------------------------------
         page(n) {
-            console.log('click page '+n);
+            console.log('page '+n);
         },
 
         getData() {
             return {
                 page: 1,
-                rowCount: 260,
+                rowCount: 150,
             };
         },
 
@@ -20,9 +20,8 @@
         getData2() {
             let resetData = {
                 page: 1,
-                rowCount: 30,
-                prev: false,
-                next: false,
+                rowCount: 46,
+                show: 'page',
             }
             // 覆蓋, 不保留原有的 state 資料
             this.setState({data: resetData});
@@ -33,8 +32,7 @@
             let resetData = {
                 page: 4,
                 rowCount: 160,
-                first: true,
-                last: true,
+                show: 'first prev page next last',
             }
             // 覆蓋, 不保留原有的 state 資料
             this.setState({data: resetData});

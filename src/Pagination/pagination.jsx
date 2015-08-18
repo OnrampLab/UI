@@ -26,13 +26,14 @@ let Pagination = React.createClass({
     getDefault(params) {
         let def = {
             page: 1,
-            pageShowCount: 10,  // 每頁顯示幾筆資料 (用來計算總共有多少page)
-            rowCount: 0,        // 總筆數
-            prev: true,
-            next: true,
-            first: false,
-            last: false,
-            gap: 5,             // 顯示5個  << < 1 2 3 4 5 > >>
+            pageShowCount: 15,          // 每頁顯示幾筆資料 (用來計算總共有多少page)
+            rowCount: 0,                // 總筆數
+            gap: 5,                     // 顯示5個  << < 1 2 3 4 5 > >>
+            show: 'prev next page',     // 'prev next page first last'
+            showPrev:  <span>&lsaquo; Prev</span>,
+            showNext:  <span>Next &rsaquo;</span>,
+            showFirst: <span>&laquo;</span>,
+            showLast:  <span>&raquo;</span>,
         };
 
         for (let key in def) {
@@ -40,7 +41,18 @@ let Pagination = React.createClass({
                 def[key] = params[key];
             }
         }
+
         return def;
+    },
+
+    /**
+     *  檢查是否有指定字串
+     */
+    hasTag(tag) {
+        if ( -1 !== this.state.show.indexOf(tag) ) {
+            return true;
+        }
+        return false;
     },
 
     /**
@@ -113,93 +125,109 @@ let Pagination = React.createClass({
     // render
     // --------------------------------------------------------------------------------
     render() {
+        let tags = this.state.show.split(' ');
+        let order = [];
+        for ( let index in tags ) {
+            switch (tags[index]) {
+                case 'page':  order.push( this.getShowPages().map(this.renderPage) );  break;
+                case 'prev':  order.push( this.renderPrev()     );  break;
+                case 'next':  order.push( this.renderNext()     );  break;
+                case 'first': order.push( this.renderFirst()    );  break;
+                case 'last':  order.push( this.renderLast()     );  break;
+            }
+        }
         return (
-            <ul className="pagination">
-                {this.renderPrev()}
-                {this.renderNext()}
-                {this.getShowPages().map(this.renderPage)}
-                {this.renderFirst()}
-                {this.renderLast()}
-            </ul>
+            <ul className="pagination">{order}</ul>
         );
     },
 
     renderPrev: function() {
-        if ( !this.state.prev ) {
+        if ( !this.hasTag('prev') ) {
             return;
         }
         if ( this.state.page === 1 ) {
             return (
-                <li className="disabled">
-                    <a href="#">&laquo; Prev</a>
+                <li key="prev" className="disabled">
+                    <a href="javascript:void(0)">{this.state.showPrev}</a>
                 </li>
             );
         }
         return (
-            <li onClick={this.handlePage.bind(this, this.state.page-1)}>
-                <a href="#">&laquo; Prev</a>
+            <li key="prev" onClick={this.handlePage.bind(this, this.state.page-1)}>
+                <a href="javascript:void(0)">{this.state.showPrev}</a>
             </li>
         );
     },
 
     renderNext: function() {
-        if ( !this.state.next ) {
+        if ( !this.hasTag('next') ) {
             return;
         }
         if ( this.state.page === this.getTotalPage() ) {
             return (
-                <li className="disabled">
-                    <a href="#">Next &raquo;</a>
+                <li key="next" className="disabled">
+                    <a href="javascript:void(0)">{this.state.showNext}</a>
                 </li>
             );
         }
         return (
-            <li onClick={this.handlePage.bind(this, this.state.page+1)}>
-                <a href="#">Next &raquo;</a>
+            <li key="next" onClick={this.handlePage.bind(this, this.state.page+1)}>
+                <a href="javascript:void(0)">{this.state.showNext}</a>
             </li>
         );
     },
 
     renderFirst: function() {
-        if ( !this.state.first ) {
+        if ( !this.hasTag('first') ) {
             return;
         }
-        if ( -1 !== this.getShowPages().indexOf(1) ) {
-            return;
+        if ( this.state.page === 1 ) {
+            return (
+                <li key="first" className="disabled">
+                    <a href="javascript:void(0)">{this.state.showFirst}</a>
+                </li>
+            );
         }
         return (
-            <li onClick={this.handlePage.bind(this, 1)}>
-                <a href="#">...1</a>
+            <li key="first" onClick={this.handlePage.bind(this, 1)}>
+                <a href="javascript:void(0)">{this.state.showFirst}</a>
             </li>
         );
     },
 
     renderLast: function() {
-        if ( !this.state.last ) {
+        if ( !this.hasTag('last') ) {
             return;
         }
         let total = this.getTotalPage();
-        if ( -1 !== this.getShowPages().indexOf(total) ) {
-            return;
+        if ( this.state.page === total ) {
+            return (
+                <li key="last" className="disabled">
+                    <a href="javascript:void(0)">{this.state.showLast}</a>
+                </li>
+            );
         }
         return (
-            <li onClick={this.handlePage.bind(this, total)}>
-                <a href="#">...{total}</a>
+            <li key="last" onClick={this.handlePage.bind(this, total)}>
+                <a href="javascript:void(0)">{this.state.showLast}</a>
             </li>
         );
     },
 
     renderPage: function(n, i) {
+        if ( !this.hasTag('page') ) {
+            return;
+        }
         if ( this.state.page === n ) {
             return (
                 <li key={i} className="active">
-                    <a href='#'>{n}</a>
+                    <a href="javascript:void(0)">{n}</a>
                 </li>
             );
         }
         return (
             <li key={i} onClick={this.handlePage.bind(this, n)}>
-                <a href='#'>{n}</a>
+                <a href="javascript:void(0)">{n}</a>
             </li>
         );
     }
