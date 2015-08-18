@@ -50,7 +50,7 @@
             return (
                 <div>
                     <TableShow
-                        data={this.state.table}
+                        {...this.state.table}
                         handleRow={this.rowChange}
                     />
 
