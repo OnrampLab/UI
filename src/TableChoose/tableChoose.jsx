@@ -76,9 +76,25 @@ let TableChoose = React.createClass({
 
     setCheckbox( key, value ) {
         key = key.toString();
+        let originValue = this.getCheckbox(key);
+
         this.state.saveCheckbox[key.toString()] = value;
         this.setState({saveCheckbox: this.state.saveCheckbox});
         this.updateControlIcon();
+
+        // 供外部使用的 listenCheck 是否有建立
+        if ( !this.props.listenCheck ) {
+            return;
+        }
+        // 如果值無改變, 不會觸發外部 event
+        if ( originValue === value ) {
+            return;
+        }
+        // 如果值原本是 null, 將不會觸發, 所以在新建立參數時, 不會觸發 event
+        if ( null === originValue ) {
+            return;
+        }
+        this.props.listenCheck(key, value);
     },
 
     getAllCheckbox() {
@@ -247,11 +263,6 @@ let TableChoose = React.createClass({
      */
     handleCheck: function(key, event) {
         this.setCheckbox(key, event.target.checked);
-
-        if ( !this.props.listenCheck ) {
-            return;
-        }
-        this.props.listenCheck(key, event.target.checked);
     },
 
     handleCheckAll: function() {
