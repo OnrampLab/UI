@@ -5,7 +5,7 @@ let Pagination = React.createClass({
         // props
         listenClick:    React.PropTypes.func,
         pageShowCount:  React.PropTypes.number,
-        rowCount:       React.PropTypes.number,
+        rowCount:       React.PropTypes.number.isRequired,
         gap:            React.PropTypes.number,
         show:           React.PropTypes.string,
         showPrev:       React.PropTypes.node,
