@@ -18,31 +18,29 @@
 
         // 假設是 ajax 的過程
         getData2() {
-            let resetData = {
+            // 覆蓋, 不保留原有的 state 資料
+            this.state.data = {
                 page: 1,
                 rowCount: 46,
                 show: 'page',
-            }
-            // 覆蓋, 不保留原有的 state 資料
-            this.setState({data: resetData});
+            };
+            this.setState({data: this.state.data});
         },
 
         // 假設是 ajax 的過程
         getData3() {
-            let resetData = {
+            // 覆蓋, 不保留原有的 state 資料
+            this.state.data = {
                 page: 4,
                 rowCount: 160,
                 show: 'first prev page next last',
-            }
-            // 覆蓋, 不保留原有的 state 資料
-            this.setState({data: resetData});
+            };
+            this.setState({data: this.state.data});
 
             /*
                 如果不覆蓋, 要保留, 做法如下
                 this.state.data.page     = 4;
                 this.state.data.rowCount = 160;
-                this.state.data.first    = true;
-                this.state.data.last     = true;
                 this.setState({data: this.state.data});
             */
         },
