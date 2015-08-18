@@ -2,18 +2,42 @@
 
 let Pagination = React.createClass({
     propTypes: {
-        listenClick: React.PropTypes.func,
+        // props
+        listenClick:    React.PropTypes.func,
+        pageShowCount:  React.PropTypes.number,
+        rowCount:       React.PropTypes.number,
+        gap:            React.PropTypes.number,
+        show:           React.PropTypes.string,
+        showPrev:       React.PropTypes.node,
+        showNext:       React.PropTypes.node,
+        showFirst:      React.PropTypes.node,
+        showLast:       React.PropTypes.node,
+        // state
+        page:           React.PropTypes.number,
     },
 
     getInitialState() {
-        return this.getDefault( this.props.data );
+        return this.getDefault( this.props );
+    },
+
+    getDefaultProps: function() {
+        return {
+            pageShowCount: 15,                      // 每頁顯示幾筆資料 (用來計算總共有多少page)
+            rowCount: 0,                            // 總筆數
+            gap: 5,                                 // 顯示5個  << < 1 2 3 4 5 > >>
+            show: 'prev next page',                 // 'prev next page first last'
+            showPrev:  <span>&lsaquo; Prev</span>,
+            showNext:  <span>Next &rsaquo;</span>,
+            showFirst: <span>&laquo;</span>,
+            showLast:  <span>&raquo;</span>,
+        };
     },
 
     /**
      *  當一個掛載的組件接收到新的 props 的時候被調用
      */
     componentWillReceiveProps(nextProps) {
-        this.state = this.getDefault( nextProps.data );
+        this.state = this.getDefault(nextProps);
     },
 
     // --------------------------------------------------------------------------------
@@ -25,23 +49,8 @@ let Pagination = React.createClass({
      */
     getDefault(params) {
         let def = {
-            page: 1,
-            pageShowCount: 15,          // 每頁顯示幾筆資料 (用來計算總共有多少page)
-            rowCount: 0,                // 總筆數
-            gap: 5,                     // 顯示5個  << < 1 2 3 4 5 > >>
-            show: 'prev next page',     // 'prev next page first last'
-            showPrev:  <span>&lsaquo; Prev</span>,
-            showNext:  <span>Next &rsaquo;</span>,
-            showFirst: <span>&laquo;</span>,
-            showLast:  <span>&raquo;</span>,
+            page: params.page ? params.page : 1,
         };
-
-        for (let key in def) {
-            if( typeof(params[key])!=="undefined" ) {
-                def[key] = params[key];
-            }
-        }
-
         return def;
     },
 
@@ -49,7 +58,7 @@ let Pagination = React.createClass({
      *  檢查是否有指定字串
      */
     hasTag(tag) {
-        if ( -1 !== this.state.show.indexOf(tag) ) {
+        if ( -1 !== this.props.show.indexOf(tag) ) {
             return true;
         }
         return false;
@@ -59,7 +68,7 @@ let Pagination = React.createClass({
      *  總共幾頁
      */
     getTotalPage() {
-        return Math.ceil(this.state.rowCount / this.state.pageShowCount);
+        return Math.ceil(this.props.rowCount / this.props.pageShowCount);
     },
 
     /**
@@ -72,17 +81,17 @@ let Pagination = React.createClass({
     getShowPages() {
         let total = this.getTotalPage();
         let start, stop;
-        if ( total >= this.state.gap ) {
+        if ( total >= this.props.gap ) {
             // 顯示 gap 的數量
             // 必須要計算 active page 在中間的位置
-            start = this.state.page - Math.floor(this.state.gap/2);
+            start = this.state.page - Math.floor(this.props.gap/2);
             if ( start < 1 ) {
                 start = 1;
             }
-            stop = start + this.state.gap - 1;
+            stop = start + this.props.gap - 1;
             if ( stop > total ) {
                 stop  = total;
-                start = total-this.state.gap+1; // 開始的頁數要回補, 不然在尾頁的數量會少於 gap
+                start = total-this.props.gap+1; // 開始的頁數要回補, 不然在尾頁的數量會少於 gap
             }
         }
         else {
@@ -125,7 +134,7 @@ let Pagination = React.createClass({
     // render
     // --------------------------------------------------------------------------------
     render() {
-        let tags = this.state.show.split(' ');
+        let tags = this.props.show.split(' ');
         let order = [];
         for ( let index in tags ) {
             switch (tags[index]) {
@@ -148,13 +157,13 @@ let Pagination = React.createClass({
         if ( this.state.page === 1 ) {
             return (
                 <li key="prev" className="disabled">
-                    <a href="javascript:void(0)">{this.state.showPrev}</a>
+                    <a href="javascript:void(0)">{this.props.showPrev}</a>
                 </li>
             );
         }
         return (
             <li key="prev" onClick={this.handlePage.bind(this, this.state.page-1)}>
-                <a href="javascript:void(0)">{this.state.showPrev}</a>
+                <a href="javascript:void(0)">{this.props.showPrev}</a>
             </li>
         );
     },
@@ -166,13 +175,13 @@ let Pagination = React.createClass({
         if ( this.state.page === this.getTotalPage() ) {
             return (
                 <li key="next" className="disabled">
-                    <a href="javascript:void(0)">{this.state.showNext}</a>
+                    <a href="javascript:void(0)">{this.props.showNext}</a>
                 </li>
             );
         }
         return (
             <li key="next" onClick={this.handlePage.bind(this, this.state.page+1)}>
-                <a href="javascript:void(0)">{this.state.showNext}</a>
+                <a href="javascript:void(0)">{this.props.showNext}</a>
             </li>
         );
     },
@@ -184,13 +193,13 @@ let Pagination = React.createClass({
         if ( this.state.page === 1 ) {
             return (
                 <li key="first" className="disabled">
-                    <a href="javascript:void(0)">{this.state.showFirst}</a>
+                    <a href="javascript:void(0)">{this.props.showFirst}</a>
                 </li>
             );
         }
         return (
             <li key="first" onClick={this.handlePage.bind(this, 1)}>
-                <a href="javascript:void(0)">{this.state.showFirst}</a>
+                <a href="javascript:void(0)">{this.props.showFirst}</a>
             </li>
         );
     },
@@ -203,13 +212,13 @@ let Pagination = React.createClass({
         if ( this.state.page === total ) {
             return (
                 <li key="last" className="disabled">
-                    <a href="javascript:void(0)">{this.state.showLast}</a>
+                    <a href="javascript:void(0)">{this.props.showLast}</a>
                 </li>
             );
         }
         return (
             <li key="last" onClick={this.handlePage.bind(this, total)}>
-                <a href="javascript:void(0)">{this.state.showLast}</a>
+                <a href="javascript:void(0)">{this.props.showLast}</a>
             </li>
         );
     },

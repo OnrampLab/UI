@@ -30,7 +30,7 @@
 function output() {
 
 $output = <<<'EOD'
-<Pagination data={this.state.data} listenClick={this.page} />
+<Pagination {...this.state.data} listenClick={this.page} />
 
 Example:
 
