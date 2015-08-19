@@ -11,11 +11,11 @@
  */
 let InputDate = React.createClass({
 
+    // TODO: 請分離 state & props
     getInitialState() {
         return {
             'name': this.props.name,
             'combobox': {
-                'actionName': this.props.name,
                 'width': '',
                 'options': [],
             },
@@ -26,21 +26,18 @@ let InputDate = React.createClass({
     // helper
     // --------------------------------------------------------------------------------
     getElementWidth() {
-        // TODO: 可能是錯的!! 請查明!!
-        let $inputBox = $('input[name="'+ this.props.name +'"]');
-        return $inputBox.css('width');
+        let dom = React.findDOMNode(this.refs.container);
+        return dom.offsetWidth;
     },
 
     setElementValue(value) {
-        // TODO: 可能是錯的!! 請查明!!
-        let $inputBox = $('input[name="'+ this.props.name +'"]');
-        return $inputBox.val(value);
+        let dom = React.findDOMNode(this.refs.container);
+        dom.value = value;
     },
 
     getElementValue() {
-        // TODO: 可能是錯的!! 請查明!!
-        let $inputBox = $('input[name="'+ this.props.name +'"]');
-        return $inputBox.val();
+        let dom = React.findDOMNode(this.refs.container);
+        return dom.value;
     },
 
     /**
@@ -156,6 +153,7 @@ let InputDate = React.createClass({
 
             //  游標位置
             // event.stopPropagation()
+            // event.preventDefault();
             // console.log(event.target.selectionStart);
         }
         // 當日期完整時, 輸入 ↓ 表示減日期
@@ -173,14 +171,21 @@ let InputDate = React.createClass({
 
     },
 
+    /**
+     *  comboBox 選取之後觸發的 event
+     */
+    handleChoose(value) {
+        this.setElementValue(value);
+    },
+
     // --------------------------------------------------------------------------------
     // render
     // --------------------------------------------------------------------------------
     render() {
         return (
             <span>
-                <input type="text" name={this.props.name} ref={this.props.name} onKeyUp={this.handleKey} maxLength="10" placeholder="yyyy-mm-dd" />
-                <ComboBox data={this.state.combobox} ref="box" />
+                <input type="text" name={this.props.name} ref="container" onKeyUp={this.handleKey} maxLength="10" placeholder="yyyy-mm-dd" />
+                <ComboBox data={this.state.combobox} listenChoose={this.handleChoose} ref="box" />
             </span>
         );
     },
@@ -213,7 +218,6 @@ let ComboBox = React.createClass({
      */
     getDefault(params) {
         let def = {
-            'actionName': '',
             'width': '',
             'maxOption': 5,
             'options': [],
@@ -236,15 +240,6 @@ let ComboBox = React.createClass({
     },
 
     // --------------------------------------------------------------------------------
-    // 回傳呼叫 comboBox 物件的方法
-    // --------------------------------------------------------------------------------
-    setToParent(value) {
-        let $inputBox = $('input[name="'+ this.state.actionName +'"]');
-        // TODO: 這應該是錯誤的寫法!! 請更正!!
-        $inputBox.val( value );
-    },
-
-    // --------------------------------------------------------------------------------
     // event
     // --------------------------------------------------------------------------------
     handKey: function(event) {
@@ -252,13 +247,13 @@ let ComboBox = React.createClass({
         let ENTER_KEY = 13;
 
         if ( event.keyCode == ENTER_KEY ) {
-            this.setToParent(event.target.value);
+            this.props.listenChoose(event.target.value);
             this.setState({options:[]});
         }
     },
 
     handClick: function(event) {
-        this.setToParent(event.target.value);
+        this.props.listenChoose(event.target.value);
         this.setState({options:[]});
     },
 
