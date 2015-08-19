@@ -16,21 +16,21 @@ let Pagination = React.createClass({
         page:           React.PropTypes.number,
     },
 
-    getInitialState() {
-        return this.getDefault(this.props);
-    },
-
     getDefaultProps: function() {
         return {
-            pageShowCount: 15,                      // 每頁顯示幾筆資料 (用來計算總共有多少page)
-            rowCount: 0,                            // 總筆數
-            gap: 5,                                 // 顯示5個  << < 1 2 3 4 5 > >>
-            show: 'prev next page',                 // 'prev next page first last'
-            showPrev:  <span>&lsaquo; Prev</span>,
-            showNext:  <span>Next &rsaquo;</span>,
-            showFirst: <span>&laquo;</span>,
-            showLast:  <span>&raquo;</span>,
+            pageShowCount:  15,                         // 每頁顯示幾筆資料 (用來計算總共有多少page)
+            rowCount:       0,                          // 總筆數
+            gap:            5,                          // 顯示多少可點擊頁數  << < 1 2 3 4 5 > >>
+            show:           'prev next page',           // 'prev next page first last'
+            showPrev:       <span>&lsaquo; Prev</span>,
+            showNext:       <span>Next &rsaquo;</span>,
+            showFirst:      <span>&laquo;</span>,
+            showLast:       <span>&raquo;</span>,
         };
+    },
+
+    getInitialState() {
+        return this.getDefault(this.props);
     },
 
     /**
@@ -56,6 +56,8 @@ let Pagination = React.createClass({
 
     /**
      *  檢查是否有指定字串
+     *      example:
+     *          "prev next page first last"
      */
     hasTag(tag) {
         if ( -1 !== this.props.show.indexOf(tag) ) {
@@ -91,7 +93,7 @@ let Pagination = React.createClass({
             stop = start + this.props.gap - 1;
             if ( stop > total ) {
                 stop  = total;
-                start = total-this.props.gap+1; // 開始的頁數要回補, 不然在尾頁的數量會少於 gap
+                start = total - this.props.gap + 1;  // 開始的頁數要回補, 不然在尾頁的數量會少於 gap
             }
         }
         else {

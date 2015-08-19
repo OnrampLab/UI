@@ -5,8 +5,8 @@
         // --------------------------------------------------------------------------------
         // event
         // --------------------------------------------------------------------------------
-        page(n) {
-            console.log('page '+n);
+        handleClick(page) {
+            console.log('page '+page);
         },
 
         getData() {
@@ -56,7 +56,7 @@
             return (
                 <section>
                     <nav>
-                        <Pagination {...this.state.data} listenClick={this.page} />
+                        <Pagination {...this.state.data} listenClick={this.handleClick} />
                     </nav>
                     <p>
                         <button className="btn btn-primary" onClick={this.getData2}>
