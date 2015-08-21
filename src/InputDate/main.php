@@ -19,15 +19,9 @@
         </div>
     </div>
 
-
     <script type="text/jsx" src="src/InputDate/inputDate.jsx"></script>
     <script type="text/jsx">
         var Main = React.createClass({
-            // --------------------------------------------------------------------------------
-            // event
-            // --------------------------------------------------------------------------------
-
-            // --------------------------------------------------------------------------------
             render() {
                 return (
                     <div>
@@ -40,4 +34,3 @@
         });
         React.render(<Main />, document.getElementById('content'));
     </script>
-
