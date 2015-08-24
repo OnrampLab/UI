@@ -1,6 +1,6 @@
 {
   "version": "v1.0.0",
-  "bundleName": "bundle",
+  "bundleName": "react-stargazer",
   "name": "gulp-babel-livereload",
   "devDependencies": {
     "gulp": "^3.9",
@@ -9,6 +9,11 @@
     "gulp-concat": "^2.5.2",
     "gulp-notify": "^2.2",
     "gulp-sourcemaps": "^1.5.2",
-    "react-jsx-anywhere": "^0.*" 
+    "react-jsx-anywhere": "^0.*",
+
+    "react": "^0.*",
+    "jquery": "^2.1.*",
+    "bootstrap": "^3.*",
+    "font-awesome": "^4.*"
   }
 }

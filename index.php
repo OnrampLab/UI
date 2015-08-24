@@ -13,16 +13,14 @@
   <head>
     <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
     <title>Example</title>
-    <script src="dist/jquery/jquery-2.0.3.js"></script>
-    <script src="dist/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="dist/bootstrap-3.3.5-dist/css/bootstrap.min.css" />
+    <script src="build/assets/jquery/jquery.js"></script>
+    <script src="build/assets/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="build/assets/bootstrap/css/bootstrap.min.css" />
 
-    <link rel="stylesheet" href="dist/font-awesome-4.4.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="build/assets/font-awesome/css/font-awesome.css" />
 
-    <script src="dist/react-0.13.3/build/react.js"></script>
-    <script src="dist/react-0.13.3/build/JSXTransformer.js"></script>
-    <script src="dist/react-bootstrap/react-bootstrap.min.js"></script>
-
+    <script src="build/assets/react/react.js"></script>
+    <script src="build/assets/react/JSXTransformer.js"></script>
     <script src="dist/utils.js"></script>
   </head>
   <body>
