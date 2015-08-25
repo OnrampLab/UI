@@ -8,6 +8,8 @@
     if ( !$subPage ) {
         $subPage = getDefaultSubMenu($mainPage);
     }
+
+
 ?><!DOCTYPE html>
 <html>
   <head>
@@ -68,9 +70,8 @@
 
             </div>
             <div class="col-md-10">
-
-                <?php getContent($mainPage, $subPage); ?>
-
+                <?php showContent($mainPage, $subPage); ?>
+                <?php showCompileJs($mainPage, $subPage); ?>
             </div>
         </div>
 
@@ -81,7 +82,7 @@
 </html>
 <?php
 
-    function getContent( $mainPage, $subPage )
+    function showContent( $mainPage, $subPage )
     {
         $path = getMenuPath($mainPage, $subPage);
         if ( $path ) {
@@ -90,5 +91,14 @@
                 include $file;
             }
         }
+    }
+
+    function showCompileJs( $mainPage, $subPage )
+    {
+        $pathfile = getMenuPath($mainPage, $subPage) . '/compile.tmp.js';
+        if ( !file_exists($pathfile) ) {
+            return;
+        }
+        echo '<'. 'script src="'. $pathfile .'"></script>';
     }
 

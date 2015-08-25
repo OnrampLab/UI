@@ -25,10 +25,12 @@
             return $config;
         }
 
-        $config = include(BASE_PATH . '/config/config.php');
+        $configContent = file_get_contents(BASE_PATH . '/config/config.json');
+        $config = json_decode($configContent, true);
         if ( !$config ) {
             return [];
         }
+
         return getConfig($key);
     }
 
