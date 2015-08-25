@@ -1,7 +1,4 @@
 
-    <script type="text/jsx" src="src/Pagination/pagination.jsx"></script>
-    <script type="text/jsx" src="src/Pagination/main.js"></script>
-
     <div class="row">
         <div class="col-md-10">
 
