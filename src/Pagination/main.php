@@ -13,7 +13,7 @@
                     <h3 class="panel-title">版本</h3>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" href="javascript:void(0);">0.2 beta</a>
+                    <div class="list-group-item">0.2 beta</div>
                 </div>
             </div>
 
@@ -22,9 +22,9 @@
                     <h3 class="panel-title">相依性</h3>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" href="javascript:void(0);">Bootstrap</a>
-                    <a class="list-group-item" href="javascript:void(0);">未使用 jQuery</a>
-                    <a class="list-group-item" href="javascript:void(0);">未使用 utils</a>
+                    <div class="list-group-item">Bootstrap</div>
+                    <div class="list-group-item">未使用 jQuery</div>
+                    <div class="list-group-item">未使用 utils</div>
                 </div>
             </div>
 
