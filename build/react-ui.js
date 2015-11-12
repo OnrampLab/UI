@@ -19,6 +19,57 @@
         },
 
         /**
+         *  格式化 Date() 物件成為 yyyy-mm-dd 格式
+         *
+         *  @param Date()
+         *  @return string
+         */
+        getDate: function getDate(date) {
+            var yyyy = date.getFullYear().toString();
+            var mm = (date.getMonth() + 1).toString();
+            var dd = date.getDate().toString();
+            return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]);
+        },
+
+        /**
+         *  陣列 get 工具
+         *  在 key-value 陣列中, 找到相對應的 第一組 key, value
+         *  傳回陣列索引值
+         *
+         *  @dependency this.each
+         *  @return null or number
+         */
+        indexOf: function indexOf(array, key, val) {
+            var result = null;
+            this.each(array, function (index, item) {
+                if (item[key] === val) {
+                    result = index;
+                    return false;
+                }
+            });
+            return result;
+        },
+
+        /**
+         *  陣列 set 工具
+         *  在 key-value 陣列中, 找到相對應的 key
+         *  將 value 寫入 (多筆)
+         *
+         *  @dependency this.each
+         *  @return int 影響筆數
+         */
+        writeIndexOf: function writeIndexOf(array, key, val) {
+            var affect = 0;
+            this.each(array, function (index, item) {
+                if (item[key]) {
+                    item[key] = val;
+                    affect++;
+                }
+            });
+            return affect;
+        },
+
+        /**
          *  each
          *      - 可以代入 object & array
          *      - 在 callback 中使用 "return false" 將離開整個迴圈
@@ -58,6 +109,376 @@
 })('utils');
 'use strict';
 
+var ui = ui || {};
+ui.Breadcrumb = React.createClass({
+    displayName: 'Breadcrumb',
+
+    /**
+     *
+     */
+    getDefaultProps: function getDefaultProps() {
+        return {
+            rows: []
+        };
+    },
+
+    /**
+     *  已掛載的組件接收到新的 props 被調用
+     */
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        if (nextProps) {
+            this.props = nextProps;
+        }
+    },
+
+    /**
+     *  每次更新都調用
+     */
+    componentDidUpdate: function componentDidUpdate() {},
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    /**
+     *  管理點擊的 row 資訊
+     */
+    handleCheck: function handleCheck(row) {
+        // 供外部使用的 listenClick 是否有建立
+        if (this.props.listenClick) {
+            this.props.listenClick(row);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            'div',
+            null,
+            this.props.rows.map(this.renderItem.bind(this))
+        );
+    },
+
+    renderItem: function renderItem(row, i) {
+        var iconStyle = {
+            'margin-left': '10px',
+            'margin-right': '10px'
+        };
+
+        var icon = '';
+        if (row.icon) {
+            var className = "fa-lg fa fa-" + row.icon;
+            icon = React.createElement('i', { className: className, style: iconStyle });
+        }
+
+        var nextIcon = '';
+        if (i !== 0) {
+            nextIcon = React.createElement('span', { className: 'glyphicon glyphicon-chevron-right', style: iconStyle });
+        }
+
+        var show = React.createElement(
+            'button',
+            { type: 'button', className: 'btn btn-default', onClick: this.handleCheck.bind(this, row) },
+            icon,
+            row.name
+        );
+        if (row.href) {
+            show = React.createElement(
+                'a',
+                { href: row.href },
+                show
+            );
+        }
+
+        return React.createElement(
+            'span',
+            null,
+            nextIcon,
+            show
+        );
+    }
+
+});
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var ui = ui || {};
+ui.ButtonGroup = React.createClass({
+    displayName: 'ButtonGroup',
+
+    /**
+     *
+     */
+    getDefaultProps: function getDefaultProps() {
+        return {
+            // lg, sm, xs
+            size: '',
+
+            //
+            rows: [],
+
+            // focus options
+            options: {
+                showName: null,
+                type: null
+            }
+        };
+    },
+
+    /**
+     *  已掛載的組件接收到新的 props 被調用
+     */
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        if (nextProps) {
+            this.props = nextProps;
+        }
+    },
+
+    /**
+     *  每次更新都調用
+     */
+    componentDidUpdate: function componentDidUpdate() {},
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    /**
+     *  管理點擊的 row 資訊
+     */
+    handleCheck: function handleCheck(row) {
+        // 供外部使用的 listenClick 是否有建立
+        if (this.props.listenClick) {
+            this.props.listenClick(row);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // check
+    // --------------------------------------------------------------------------------
+    isFocusShowName: function isFocusShowName() {
+        if (this.props.options.showName === false) {
+            return false;
+        }
+        return true;
+    },
+
+    // --------------------------------------------------------------------------------
+    // get
+    // --------------------------------------------------------------------------------
+    getSizeClass: function getSizeClass() {
+        switch (this.props.size) {
+            case 'lg':
+                return 'btn-group-lg';
+            case 'sm':
+                return 'btn-group-sm';
+            case 'xs':
+                return 'btn-group-xs';
+        }
+        return '';
+    },
+
+    getTypeClass: function getTypeClass(type) {
+        switch (type) {
+            case 'primary':
+                return 'btn-primary';
+            case 'success':
+                return 'btn-success';
+            case 'info':
+                return 'btn-info';
+            case 'warning':
+                return 'btn-warning';
+            case 'danger':
+                return 'btn-danger';
+            case 'link':
+                return 'btn-link';
+        }
+        return '';
+    },
+
+    getFocusTypeClass: function getFocusTypeClass() {
+        var type = this.props.options.type;
+        if (type === null) {
+            type = '';
+        }
+        return this.getTypeClass(type);
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        var className = 'btn-group ' + this.getSizeClass();
+        return React.createElement(
+            'div',
+            { className: className, role: 'group' },
+            this.props.rows.map(this.renderButton.bind(this))
+        );
+    },
+
+    renderButton: function renderButton(row, i) {
+        var options = {};
+        var linkIcon = null;
+        var loadIcon = null;
+        var className = 'btn btn-default';
+        var buttonStyle = null;
+        var type = this.getTypeClass(row.type);
+        if (type) {
+            className += ' ' + type;
+        }
+
+        // is link
+        if (row.href) {
+            var style = {
+                'margin-left': '5px'
+            };
+            options.href = row.href;
+
+            // 內連結
+            if (!row.target) {
+                linkIcon = React.createElement('i', { className: 'fa fa-link', style: style });
+            }
+            // 跳出連結
+            else {
+                    options.target = row.target;
+                    linkIcon = React.createElement('i', { className: 'fa fa-external-link-square', style: style });
+                }
+        }
+
+        if (row.disabled) {
+            options.disabled = "disabled";
+        }
+
+        if (row.display === false) {
+            buttonStyle = {
+                'display': 'none'
+            };
+        } else if (row.visibility === false) {
+            buttonStyle = {
+                'visibility': 'hidden'
+            };
+        }
+
+        if (row.status === 'load') {
+            var style = {
+                'margin-left': '5px'
+            };
+            loadIcon = React.createElement('i', { className: 'fa fa-circle-o-notch fa-spin', style: style });
+        }
+
+        if (row.status === 'active') {
+            className += ' active';
+        }
+
+        // 在 focus 的情況下, 可以覆蓋 "type" 來指定不同的顏色
+        var focusType = this.getFocusTypeClass();
+        if (focusType) {
+            row.type = focusType;
+            var _type = this.getTypeClass(row.type);
+            if (_type) {
+                className += ' ' + _type;
+            }
+        }
+
+        //
+        //  status
+        //      false    => not focus
+        //      'load'   => loading
+        //      'active' => active
+        //
+        if (row.status === 'load' && !this.isFocusShowName()) {
+            return React.createElement(
+                'a',
+                _extends({ key: i, type: 'button', className: className, style: buttonStyle, onClick: this.handleCheck.bind(this, row) }, options),
+                linkIcon,
+                loadIcon
+            );
+        }
+        return React.createElement(
+            'a',
+            _extends({ key: i, type: 'button', className: className, style: buttonStyle, onClick: this.handleCheck.bind(this, row) }, options),
+            row.name,
+            linkIcon,
+            loadIcon
+        );
+    }
+
+});
+'use strict';
+
+var ui = ui || {};
+ui.Info = React.createClass({
+    displayName: "Info",
+
+    /**
+     *
+     */
+    getDefaultProps: function getDefaultProps() {
+        return {
+            rows: []
+        };
+    },
+
+    /**
+     *  已掛載的組件接收到新的 props 被調用
+     */
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        if (nextProps) {
+            this.props = nextProps;
+        }
+    },
+
+    /**
+     *  每次更新都調用
+     */
+    componentDidUpdate: function componentDidUpdate() {},
+
+    // --------------------------------------------------------------------------------
+    // render
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "ul",
+            { className: "nav nav-pills" },
+            this.props.rows.map(this.renderBlock.bind(this))
+        );
+    },
+
+    renderBlock: function renderBlock(row, i) {
+        var showValue = null;
+        if (row.value) {
+            showValue = React.createElement(
+                "span",
+                { className: "badge" },
+                row.value
+            );
+        }
+
+        var icon = null;
+        if (row.icon) {
+            var iconStyle = { 'margin-right': '5px' };
+            var iconClass = "fa fa-" + row.icon;
+            icon = React.createElement("i", { className: iconClass, style: iconStyle });
+        }
+
+        // className="active"
+        return React.createElement(
+            "li",
+            { role: "presentation" },
+            React.createElement(
+                "a",
+                { href: "javascript:void(0);" },
+                icon,
+                row.name,
+                showValue
+            )
+        );
+    }
+
+});
+'use strict';
+
 /**
  *  InputDate
  *
@@ -67,7 +488,8 @@
  *          <InputDate name="birthDate" />
  *
  */
-var InputDate = React.createClass({
+var ui = ui || {};
+ui.InputDate = React.createClass({
     displayName: 'InputDate',
 
     // TODO: 請分離 state & props
@@ -85,17 +507,17 @@ var InputDate = React.createClass({
     // helper
     // --------------------------------------------------------------------------------
     getElementWidth: function getElementWidth() {
-        var dom = React.findDOMNode(this.refs.container);
+        var dom = this.refs.container;
         return dom.offsetWidth;
     },
 
     setElementValue: function setElementValue(value) {
-        var dom = React.findDOMNode(this.refs.container);
+        var dom = this.refs.container;
         dom.value = value;
     },
 
     getElementValue: function getElementValue() {
-        var dom = React.findDOMNode(this.refs.container);
+        var dom = this.refs.container;
         return dom.value;
     },
 
@@ -157,8 +579,8 @@ var InputDate = React.createClass({
 
         // 輸入 ↓ 的時候, 要跳到 ComboBox, 並且預選第一個項目
         if (event.keyCode == 40 && this.state.combobox.options.length > 0) {
-            React.findDOMNode(this.refs.box).focus();
-            React.findDOMNode(this.refs.box).selectedIndex = 0;
+            ReactDOM.findDOMNode(this.refs.box).focus();
+            ReactDOM.findDOMNode(this.refs.box).selectedIndex = 0;
         }
         // 輸入 8 個數字時, 直接完成 yyyy-mm-dd 的格式設定
         else if (event.target.value.length == 8 && -1 === event.target.value.indexOf('-')) {
@@ -176,12 +598,10 @@ var InputDate = React.createClass({
             }
             // 輸入英文字 的時候
             else if (event.target.value.match(/[a-z]/ig)) {
-                    var date = new Date();
-                    var yyyy = date.getFullYear().toString();
-                    var mm = (date.getMonth() + 1).toString();
-                    var dd = date.getDate().toString();
-                    var format = yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]);
-                    var options = [[format, format + ' (today)']];
+
+                    var today = utils.getDate(new Date());
+                    var tomorrow = utils.getDate(new Date(new Date().getTime() + 86400 * 1000));
+                    var options = [[today, today + ' (today)'], [tomorrow, tomorrow + ' (tomorrow)']];
 
                     // update combobox options
                     this.state.combobox.options = options;
@@ -230,14 +650,14 @@ var InputDate = React.createClass({
             'span',
             null,
             React.createElement('input', { type: 'text', name: this.props.name, ref: 'container', onKeyUp: this.handleKey, maxLength: '10', placeholder: 'yyyy-mm-dd' }),
-            React.createElement(ComboBox, { data: this.state.combobox, listenChoose: this.handleChoose, ref: 'box' })
+            React.createElement(ui.InputDateComboBox, { data: this.state.combobox, listenChoose: this.handleChoose, ref: 'box' })
         );
     }
 
 });
 
-var ComboBox = React.createClass({
-    displayName: 'ComboBox',
+ui.InputDateComboBox = React.createClass({
+    displayName: 'InputDateComboBox',
 
     getInitialState: function getInitialState() {
         return this.getDefault(this.props.data);
@@ -302,7 +722,7 @@ var ComboBox = React.createClass({
     // render
     // --------------------------------------------------------------------------------
     render: function render() {
-        var id = this.getUniqueId('combobox-id-');
+        var id = this.getUniqueId('inputdate-combobox-id-');
         var options = this.state.options;
         var selectSize = options.length > this.state.maxOption ? this.state.maxOption : options.length;
 
@@ -337,7 +757,8 @@ var ComboBox = React.createClass({
 });
 'use strict';
 
-var Pagination = React.createClass({
+var ui = ui || {};
+ui.Pagination = React.createClass({
     displayName: 'Pagination',
 
     propTypes: {
@@ -647,13 +1068,17 @@ var Pagination = React.createClass({
 });
 'use strict';
 
-var TableChoose = React.createClass({
+var ui = ui || {};
+ui.TableChoose = React.createClass({
     displayName: 'TableChoose',
 
-    getInitialState: function getInitialState() {
-        return this.getDefault();
-    },
-
+    /**
+     *  只掛載第一次 (?)
+     *  順序
+     *      getDefaultProps()
+     *      getInitialState()
+     *      componentDidMount()
+     */
     getDefaultProps: function getDefaultProps() {
         return {
             headKey: '', // by heads, 一般來說會是放置資料的主鍵 example 'id' 'email'
@@ -661,41 +1086,41 @@ var TableChoose = React.createClass({
             rows: []
         };
     },
-
     // sort: [],       // by heads
     /**
-     *  當一個掛載的組件接收到新的 props 的時候被調用
+     *  取得該 component 預設值
      */
-    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-        this.state = this.getDefault();
-        this.resetAllCheckbox();
+    getInitialState: function getInitialState() {
+        return {
+            saveCheckbox: {}, // 儲存 checkbox item
+            saveControlCheckbox: 0 };
     },
-
+    // 控制 checkbox all 的功能, 並以圖示表示狀態
     /**
-     *  在掛載結束之後馬上被調用。需要DOM節點的初始化操作應該放在這里
+     *  在掛載結束之後馬上被調用
+     *  DOM init in here
      */
     componentDidMount: function componentDidMount() {
         this.resetAllCheckbox();
     },
 
     /**
-     *  在更新發生之後調用
+     *  已掛載的組件接收到新的 props 被調用
+     */
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        if (nextProps) {
+            this.props = nextProps;
+        }
+        this.state.saveCheckbox = this.getInitialState().saveCheckbox;
+        this.state.saveControlCheckbox = this.getInitialState().saveControlCheckbox;
+        this.resetAllCheckbox();
+    },
+
+    /**
+     *  每次更新都調用
      */
     componentDidUpdate: function componentDidUpdate() {},
 
-    // --------------------------------------------------------------------------------
-    // data
-    // --------------------------------------------------------------------------------
-    /**
-     *  取得預設值
-     */
-    getDefault: function getDefault() {
-        return {
-            saveCheckbox: {}, // 儲存 checkbox item
-            saveControlCheckbox: 0 };
-    },
-
-    // 控制 checkbox all 的功能
     // --------------------------------------------------------------------------------
     // item checkbox store
     // --------------------------------------------------------------------------------
@@ -731,6 +1156,19 @@ var TableChoose = React.createClass({
             return;
         }
         this.props.listenCheck(key, value);
+    },
+
+    /**
+     *  將所有 rows 的 checkbox 設定為 false
+     */
+    resetAllCheckbox: function resetAllCheckbox() {
+        var headKey = this.props.headKey;
+        var that = this;
+        var key = undefined;
+        utils.each(this.props.rows, function (index, obj) {
+            key = obj[headKey];
+            that.setCheckbox(key, false);
+        });
     },
 
     getAllCheckbox: function getAllCheckbox() {
@@ -847,16 +1285,6 @@ var TableChoose = React.createClass({
         return this.props.rows[index][this.props.headKey].toString();
     },
 
-    resetAllCheckbox: function resetAllCheckbox() {
-        var headKey = this.props.headKey;
-        var that = this;
-        var key = undefined;
-        utils.each(this.props.rows, function (index, obj) {
-            key = obj[headKey];
-            that.setCheckbox(key, false);
-        });
-    },
-
     /**
      *  引用者所需要的資訊
      */
@@ -923,11 +1351,15 @@ var TableChoose = React.createClass({
                     'thead',
                     null,
                     React.createElement(
-                        'th',
-                        { style: style },
-                        React.createElement('i', { className: icon, onClick: this.handleCheckAll })
-                    ),
-                    this.props.heads.map(this.renderHead)
+                        'tr',
+                        null,
+                        React.createElement(
+                            'th',
+                            { style: style },
+                            React.createElement('i', { className: icon, onClick: this.handleCheckAll })
+                        ),
+                        this.props.heads.map(this.renderHead)
+                    )
                 ),
                 React.createElement(
                     'tbody',
@@ -1004,7 +1436,8 @@ var TableChoose = React.createClass({
 });
 'use strict';
 
-var TableShow = React.createClass({
+var ui = ui || {};
+ui.TableShow = React.createClass({
     displayName: 'TableShow',
 
     getDefaultProps: function getDefaultProps() {
@@ -1058,7 +1491,11 @@ var TableShow = React.createClass({
                 React.createElement(
                     'thead',
                     null,
-                    this.props.heads.map(this.renderHead)
+                    React.createElement(
+                        'tr',
+                        null,
+                        this.props.heads.map(this.renderHead)
+                    )
                 ),
                 React.createElement(
                     'tbody',
