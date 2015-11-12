@@ -11,7 +11,8 @@
         <div class="col-md-2">
 
             <?php echo getInfoHtml('1.0', [
-                ['Bootstrap']
+                ['Bootstrap'],
+                ['Font Awesome', 'https://fortawesome.github.io/Font-Awesome/icons/'],
             ]); ?>
 
         </div>

@@ -28,6 +28,7 @@
                 { id: 13, name: "iPhone 6",   price: 299,   age: 33 },
                 { id: 14, name: "iPhone 6s",  price: 399,   age: 80 },
             ];
+            // 全部設定進去, react 會自行處理效能
             this.setState({"table": this.state.table});
         },
 
@@ -49,7 +50,7 @@
         render() {
             return (
                 <div>
-                    <TableChoose {...this.state.table} listenCheck={this.showCheck} ref="myTable" />
+                    <ui.TableChoose {...this.state.table} listenCheck={this.showCheck} ref="myTable" />
 
                     <button className="btn btn-primary" onClick={this.show}>
                         Show Information
@@ -62,6 +63,6 @@
             );
         },
     });
-    React.render(<Main />, document.getElementById('content'));
+    ReactDOM.render(<Main />, document.getElementById('content'));
 
 })();

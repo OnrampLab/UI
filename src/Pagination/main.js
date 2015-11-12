@@ -56,7 +56,7 @@
             return (
                 <section>
                     <nav>
-                        <Pagination {...this.state.data} listenClick={this.handleClick} />
+                        <ui.Pagination {...this.state.data} listenClick={this.handleClick} />
                     </nav>
                     <p>
                         <button className="btn btn-primary" onClick={this.getData2}>
@@ -73,6 +73,6 @@
         },
     });
 
-    React.render(<Main />, document.getElementById('content'));
+    ReactDOM.render(<Main />, document.getElementById('content'));
 
 })();

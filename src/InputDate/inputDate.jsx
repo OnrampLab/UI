@@ -9,7 +9,8 @@
  *          <InputDate name="birthDate" />
  *
  */
-let InputDate = React.createClass({
+let ui = ui || {};
+ui.InputDate = React.createClass({
 
     // TODO: 請分離 state & props
     getInitialState() {
@@ -26,17 +27,17 @@ let InputDate = React.createClass({
     // helper
     // --------------------------------------------------------------------------------
     getElementWidth() {
-        let dom = React.findDOMNode(this.refs.container);
+        let dom = this.refs.container;
         return dom.offsetWidth;
     },
 
     setElementValue(value) {
-        let dom = React.findDOMNode(this.refs.container);
+        let dom = this.refs.container;
         dom.value = value;
     },
 
     getElementValue() {
-        let dom = React.findDOMNode(this.refs.container);
+        let dom = this.refs.container;
         return dom.value;
     },
 
@@ -100,8 +101,9 @@ let InputDate = React.createClass({
 
         // 輸入 ↓ 的時候, 要跳到 ComboBox, 並且預選第一個項目
         if ( event.keyCode == 40 && this.state.combobox.options.length > 0 ) {
-            React.findDOMNode(this.refs.box).focus();
-            React.findDOMNode(this.refs.box).selectedIndex = 0;
+            ReactDOM.findDOMNode(this.refs.box).focus();
+            ReactDOM.findDOMNode(this.refs.box).selectedIndex = 0;
+
         }
         // 輸入 8 個數字時, 直接完成 yyyy-mm-dd 的格式設定
         else if( event.target.value.length == 8 && -1 === event.target.value.indexOf('-') ) {
@@ -128,13 +130,12 @@ let InputDate = React.createClass({
         }
         // 輸入英文字 的時候
         else if( event.target.value.match(/[a-z]/ig) ) {
-            let date    = new Date();
-            let yyyy    = date.getFullYear().toString();
-            let mm      = (date.getMonth()+1).toString();
-            let dd      = date.getDate().toString();
-            let format  = yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]);
-            let options = [
-                [format, format + ' (today)'],
+
+            let today    = utils.getDate( new Date() );
+            let tomorrow = utils.getDate( new Date( new Date().getTime() + (86400 * 1000) ) );
+            let options  = [
+                [today,    today    + ' (today)'],
+                [tomorrow, tomorrow + ' (tomorrow)'],
             ];
 
             // update combobox options
@@ -185,7 +186,7 @@ let InputDate = React.createClass({
         return (
             <span>
                 <input type="text" name={this.props.name} ref="container" onKeyUp={this.handleKey} maxLength="10" placeholder="yyyy-mm-dd" />
-                <ComboBox data={this.state.combobox} listenChoose={this.handleChoose} ref="box" />
+                <ui.InputDateComboBox data={this.state.combobox} listenChoose={this.handleChoose} ref="box" />
             </span>
         );
     },
@@ -196,7 +197,7 @@ let InputDate = React.createClass({
 
 
 
-let ComboBox = React.createClass({
+ui.InputDateComboBox = React.createClass({
 
     getInitialState() {
         return this.getDefault( this.props.data );
@@ -261,7 +262,7 @@ let ComboBox = React.createClass({
     // render
     // --------------------------------------------------------------------------------
     render() {
-        let id          = this.getUniqueId('combobox-id-');
+        let id          = this.getUniqueId('inputdate-combobox-id-');
         let options     = this.state.options;
         let selectSize  = (options.length > this.state.maxOption ? this.state.maxOption : options.length);
 

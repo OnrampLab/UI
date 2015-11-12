@@ -1,14 +1,10 @@
 <?php
+    date_default_timezone_set('Asia/Taipei');
     header('Content-Type: text/html; charset=utf-8');
     define('BASE_PATH',__DIR__);
     include 'lib/helper.php';
 
-    $mainPage = get('m', 'Home');
-    $subPage  = get('s');
-    if ( !$subPage ) {
-        $subPage = getDefaultSubMenu($mainPage);
-    }
-
+    list( $mainPage, $subPage ) = getCurrentPageInfo();
 
 ?><!DOCTYPE html>
 <html>
@@ -18,11 +14,9 @@
     <script src="build/assets/jquery/jquery.js"></script>
     <script src="build/assets/bootstrap/js/bootstrap.js"></script>
     <link rel="stylesheet" href="build/assets/bootstrap/css/bootstrap.min.css" />
-
     <link rel="stylesheet" href="build/assets/font-awesome/css/font-awesome.css" />
 
-    <script src="build/assets/react/react.js"></script>
-    <script src="build/assets/react/JSXTransformer.js"></script>
+    <script src="build/react-bundle.js"></script>
     <script src="dist/utils.js"></script>
   </head>
   <body>
@@ -74,8 +68,6 @@
                 <?php showCompileJs($mainPage, $subPage); ?>
             </div>
         </div>
-
-
     </section>
 
   </body>

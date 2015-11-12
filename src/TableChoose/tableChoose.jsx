@@ -1,11 +1,15 @@
 'use strict';
 
-let TableChoose = React.createClass({
+let ui = ui || {};
+ui.TableChoose = React.createClass({
 
-    getInitialState() {
-        return this.getDefault();
-    },
-
+    /**
+     *  只掛載第一次 (?)
+     *  順序
+     *      getDefaultProps()
+     *      getInitialState()
+     *      componentDidMount()
+     */
     getDefaultProps: function() {
         return {
             headKey: '',    // by heads, 一般來說會是放置資料的主鍵 example 'id' 'email'
@@ -14,39 +18,39 @@ let TableChoose = React.createClass({
          // sort: [],       // by heads
         };
     },
-
     /**
-     *  當一個掛載的組件接收到新的 props 的時候被調用
+     *  取得該 component 預設值
      */
-    componentWillReceiveProps(nextProps) {
-        this.state = this.getDefault();
-        this.resetAllCheckbox();
+    getInitialState() {
+        return {
+            saveCheckbox: {},       // 儲存 checkbox item
+            saveControlCheckbox: 0, // 控制 checkbox all 的功能, 並以圖示表示狀態
+        };
     },
-
     /**
-     *  在掛載結束之後馬上被調用。需要DOM節點的初始化操作應該放在這里
+     *  在掛載結束之後馬上被調用
+     *  DOM init in here
      */
     componentDidMount() {
         this.resetAllCheckbox();
     },
 
     /**
-     *  在更新發生之後調用
+     *  已掛載的組件接收到新的 props 被調用
      */
-    componentDidUpdate() {
+    componentWillReceiveProps(nextProps) {
+        if (nextProps) {
+            this.props = nextProps;
+        }
+        this.state.saveCheckbox        = this.getInitialState().saveCheckbox;
+        this.state.saveControlCheckbox = this.getInitialState().saveControlCheckbox;
+        this.resetAllCheckbox();
     },
 
-    // --------------------------------------------------------------------------------
-    // data
-    // --------------------------------------------------------------------------------
     /**
-     *  取得預設值
+     *  每次更新都調用
      */
-    getDefault() {
-        return {
-            saveCheckbox: {},       // 儲存 checkbox item
-            saveControlCheckbox: 0, // 控制 checkbox all 的功能
-        };
+    componentDidUpdate() {
     },
 
     // --------------------------------------------------------------------------------
@@ -84,6 +88,20 @@ let TableChoose = React.createClass({
             return;
         }
         this.props.listenCheck(key, value);
+    },
+
+    /**
+     *  將所有 rows 的 checkbox 設定為 false
+     */
+    resetAllCheckbox()
+    {
+        let headKey = this.props.headKey;
+        let that = this;
+        let key;
+        utils.each( this.props.rows, function(index, obj) {
+            key = obj[headKey];
+            that.setCheckbox(key, false);
+        });
     },
 
     getAllCheckbox() {
@@ -203,17 +221,6 @@ let TableChoose = React.createClass({
         return this.props.rows[index][this.props.headKey].toString();
     },
 
-    resetAllCheckbox()
-    {
-        let headKey = this.props.headKey;
-        let that = this;
-        let key;
-        utils.each( this.props.rows, function(index, obj) {
-            key = obj[headKey];
-            that.setCheckbox(key, false);
-        });
-    },
-
     /**
      *  引用者所需要的資訊
      */
@@ -274,10 +281,12 @@ let TableChoose = React.createClass({
             <span>
                 <table className="table table-condensed table-bordered table-hover">
                     <thead>
-                        <th style={style}>
-                            <i className={icon} onClick={this.handleCheckAll}></i>
-                        </th>
-                        {this.props.heads.map(this.renderHead)}
+                        <tr>
+                            <th style={style}>
+                                <i className={icon} onClick={this.handleCheckAll}></i>
+                            </th>
+                            {this.props.heads.map(this.renderHead)}
+                        </tr>
                     </thead>
                     <tbody>
                         {this.props.rows.map(this.renderRow)}

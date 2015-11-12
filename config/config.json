@@ -2,9 +2,12 @@
     "menu": [
         ["Home",    "Description",  "src/Home"          ],
         ["Home",    "Utils",        "src/HomeUtils"     ],
+        ["Button",  "ButtonGroup",  "src/ButtonGroup"   ],
+        ["Button",  "Breadcrumb",   "src/Breadcrumb"    ],
         ["Table",   "TableShow",    "src/TableShow"     ],
         ["Table",   "TableChoose",  "src/TableChoose"   ],
         ["Form",    "InputDate",    "src/InputDate"     ],
+        ["Message", "Info",         "src/Info"          ],
         ["Other",   "Pagination",   "src/Pagination"    ]
     ]
 }

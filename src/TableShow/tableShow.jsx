@@ -1,6 +1,7 @@
 'use strict';
 
-let TableShow = React.createClass({
+let ui = ui || {};
+ui.TableShow = React.createClass({
 
     getDefaultProps: function() {
         return {
@@ -48,7 +49,9 @@ let TableShow = React.createClass({
             <span>
                 <table className="table table-condensed table-bordered table-striped">
                     <thead>
-                        {this.props.heads.map(this.renderHead)}
+                        <tr>
+                            {this.props.heads.map(this.renderHead)}
+                        </tr>
                     </thead>
                     <tbody>
                         {this.props.rows.map(this.renderRow)}
