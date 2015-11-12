@@ -49,6 +49,7 @@ gulp.task('compileBundle', function () {
     return gulp.src([
             './node_modules/react/dist/react.min.js',
             './node_modules/react-dom/dist/react-dom.min.js',
+            './node_modules/babel-core/browser.min.js',
         ])
         .pipe(concat(getBundleName()))
         .pipe(gulp.dest("build"));
@@ -105,6 +106,7 @@ gulp.task('developerDemo', function () {
 gulp.task('toAssets', function () {
     gulp.src('./node_modules/react/dist/**')                .pipe(gulp.dest("build/assets/react/"));
     gulp.src('./node_modules/react-dom/dist/**')            .pipe(gulp.dest("build/assets/react-dom/"));
+    gulp.src('./node_modules/babel-core/browser.*')         .pipe(gulp.dest("build/assets/babel-core/"));
     gulp.src('./node_modules/bootstrap/dist/**')            .pipe(gulp.dest("build/assets/bootstrap/"));
     gulp.src('./node_modules/font-awesome/css/**')          .pipe(gulp.dest("build/assets/font-awesome/css/"));
     gulp.src('./node_modules/font-awesome/fonts/**')        .pipe(gulp.dest("build/assets/font-awesome/fonts/"));

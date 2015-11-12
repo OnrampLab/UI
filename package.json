@@ -12,6 +12,7 @@
 
     "react": "^0.14.*",
     "react-dom": "^0.14.*",
+    "babel-core": "^5.8.*",
     "react-jsx-anywhere": "^0.*",
     "jquery": "^2.1.*",
     "bootstrap": "^3.*",
