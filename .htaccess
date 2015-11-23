@@ -1,0 +1,6 @@
+############################################
+## 注意!! 只限用於開發環境
+<Files "index.php">
+    php_value auto_append_file "livejs/livejs.php"
+    php_flag output_buffering on
+</Files>

@@ -1,6 +1,7 @@
 'use strict';
 
-let Pagination = React.createClass({
+let ui = ui || {};
+ui.Pagination = React.createClass({
     propTypes: {
         // props
         listenClick:    React.PropTypes.func,
