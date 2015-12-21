@@ -8,6 +8,7 @@
         ["Table",   "TableChoose",  "src/TableChoose"   ],
         ["Form",    "InputDate",    "src/InputDate"     ],
         ["Message", "Info",         "src/Info"          ],
-        ["Other",   "Pagination",   "src/Pagination"    ]
+        ["Other",   "Pagination",   "src/Pagination"    ],
+        ["Other",   "Selection",    "src/Selection"     ]
     ]
 }
