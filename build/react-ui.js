@@ -757,6 +757,56 @@ ui.InputDateComboBox = React.createClass({
 });
 'use strict';
 
+/**
+ *  InputDate
+ *
+ *      params:
+ *
+ *      code:
+ *          <InputText label="Label" name="name" id="id" maxLength="10" placeholder="placeholder" />
+ *
+ */
+var InputText = React.createClass({
+    displayName: 'InputText',
+
+    getInitialState: function getInitialState() {
+        return {
+            'label': this.props.label,
+            'name': this.props.name,
+            'id': this.props.id,
+            'max': this.props.maxLength,
+            'placeholder': this.props.placeholder
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleKey: function handleKey(event) {},
+
+    // --------------------------------------------------------------------------------
+    // render
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            'div',
+            { className: 'input-group input-group' },
+            React.createElement(
+                'span',
+                { className: 'input-group-addon', id: 'sizing-addon1' },
+                this.props.label
+            ),
+            React.createElement('input', { type: 'text', className: 'form-control', 'aria-describedby': 'sizing-addon1', name: this.props.name, id: this.props.id, onKeyUp: this.handleKey, maxLength: this.props.maxLength, placeholder: this.props.placeholder })
+        );
+    }
+
+});
+'use strict';
+
 var ui = ui || {};
 ui.Pagination = React.createClass({
     displayName: 'Pagination',
@@ -1062,6 +1112,43 @@ ui.Pagination = React.createClass({
                 { href: 'javascript:void(0)' },
                 n
             )
+        );
+    }
+
+});
+'use strict';
+
+var ui = ui || {};
+ui.Selection = React.createClass({
+    displayName: "Selection",
+
+    propTypes: {
+        // props
+        myoptions: React.PropTypes.string
+    },
+
+    getInitialState: function getInitialState() {
+        return this.props;
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // render
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "select",
+            { ref: "menu" },
+            this.props.myoptions.map(function (o, i) {
+                return React.createElement(
+                    "option",
+                    { key: i, value: o.selectValue },
+                    o.selectLabel
+                );
+            })
         );
     }
 
