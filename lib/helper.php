@@ -25,10 +25,12 @@
             return $config;
         }
 
-        $config = include(BASE_PATH . '/config/config.php');
+        $configContent = file_get_contents(BASE_PATH . '/config/config.json');
+        $config = json_decode($configContent, true);
         if ( !$config ) {
             return [];
         }
+
         return getConfig($key);
     }
 
@@ -86,5 +88,66 @@
 
     function outputCode($code) {
         echo '<pre>'. htmlspecialchars($code) .'</pre>';
+    }
+
+
+    function getCurrentPageInfo()
+    {
+        $mainPage = get('m', 'Home');
+        $subPage  = get('s');
+        if ( !$subPage ) {
+            $subPage = getDefaultSubMenu($mainPage);
+        }
+        return [$mainPage, $subPage];
+    }
+
+
+    function getReadme()
+    {
+        list( $mainPage, $subPage ) = getCurrentPageInfo();
+        $path = getMenuPath($mainPage, $subPage);
+        if ($path) {
+            $file = $path.'/readme.txt';
+            if (file_exists($file)) {
+                return file_get_contents($file);
+            }
+        }
+    }
+
+    function getInfoHtml($version, $items)
+    {
+        $itemContent = '';
+        foreach ($items as $item) {
+            if (!$item) {
+                continue;
+            }
+            $show = $item[0];
+            if (isset($item[1]) && $item[1]) {
+                $show = '<a href="'. $item[1] .'" target="_blank">'. $item[0] .'</a>';
+            }
+
+            $itemContent .= '<div class="list-group-item">'. $show .'</div>';
+        }
+
+        echo <<<"EOD"
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">版本</h3>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item">{$version}</div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">相依性</h3>
+                </div>
+                <div class="list-group">
+                    {$itemContent}
+                </div>
+            </div>
+EOD;
+
     }
 

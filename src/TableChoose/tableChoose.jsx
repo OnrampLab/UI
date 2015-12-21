@@ -1,28 +1,54 @@
 'use strict';
 
-let TableChoose = React.createClass({
-
-    getInitialState() {
-        return this.getDefault( this.props.data );
-    },
+let ui = ui || {};
+ui.TableChoose = React.createClass({
 
     /**
-     *  當一個掛載的組件接收到新的 props 的時候被調用
+     *  只掛載第一次 (?)
+     *  順序
+     *      getDefaultProps()
+     *      getInitialState()
+     *      componentDidMount()
      */
-    componentWillReceiveProps(nextProps) {
-        this.state = this.getDefault( nextProps.data );
-        this.resetAllCheckbox();
+    getDefaultProps: function() {
+        return {
+            headKey: '',    // by heads, 一般來說會是放置資料的主鍵 example 'id' 'email'
+            heads: [],
+            rows: [],
+         // sort: [],       // by heads
+        };
     },
-
     /**
-     *  在掛載結束之後馬上被調用。需要DOM節點的初始化操作應該放在這里
+     *  取得該 component 預設值
+     */
+    getInitialState() {
+        return {
+            saveCheckbox: {},       // 儲存 checkbox item
+            saveControlCheckbox: 0, // 控制 checkbox all 的功能, 並以圖示表示狀態
+        };
+    },
+    /**
+     *  在掛載結束之後馬上被調用
+     *  DOM init in here
      */
     componentDidMount() {
         this.resetAllCheckbox();
     },
 
     /**
-     *  在更新發生之後調用
+     *  已掛載的組件接收到新的 props 被調用
+     */
+    componentWillReceiveProps(nextProps) {
+        if (nextProps) {
+            this.props = nextProps;
+        }
+        this.state.saveCheckbox        = this.getInitialState().saveCheckbox;
+        this.state.saveControlCheckbox = this.getInitialState().saveControlCheckbox;
+        this.resetAllCheckbox();
+    },
+
+    /**
+     *  每次更新都調用
      */
     componentDidUpdate() {
     },
@@ -43,9 +69,39 @@ let TableChoose = React.createClass({
 
     setCheckbox( key, value ) {
         key = key.toString();
+        let originValue = this.getCheckbox(key);
+
         this.state.saveCheckbox[key.toString()] = value;
         this.setState({saveCheckbox: this.state.saveCheckbox});
         this.updateControlIcon();
+
+        // 供外部使用的 listenCheck 是否有建立
+        if ( !this.props.listenCheck ) {
+            return;
+        }
+        // 如果值無改變, 不會觸發外部 event
+        if ( originValue === value ) {
+            return;
+        }
+        // 如果值原本是 null, 將不會觸發, 所以在新建立參數時, 不會觸發 event
+        if ( null === originValue ) {
+            return;
+        }
+        this.props.listenCheck(key, value);
+    },
+
+    /**
+     *  將所有 rows 的 checkbox 設定為 false
+     */
+    resetAllCheckbox()
+    {
+        let headKey = this.props.headKey;
+        let that = this;
+        let key;
+        utils.each( this.props.rows, function(index, obj) {
+            key = obj[headKey];
+            that.setCheckbox(key, false);
+        });
     },
 
     getAllCheckbox() {
@@ -159,44 +215,10 @@ let TableChoose = React.createClass({
     // --------------------------------------------------------------------------------
     getRowKey(index)
     {
-        if ( !this.state.rows[index] ) {
+        if ( !this.props.rows[index] ) {
             return null;
         }
-        return this.state.rows[index][this.state.headKey].toString();
-    },
-
-    /**
-     *  取得預設值
-     *  如果參數中有相同的 key, 則覆蓋該值
-     */
-    getDefault(params) {
-        let def = {
-            headKey: '',            // by heads, 一般來說會是放置資料的主鍵 example 'id' 'email'
-            heads: [],
-         // sort: [],               // by heads
-            rows: [],
-            // 內部
-            saveCheckbox: {},       // 儲存 checkbox item
-            saveControlCheckbox: 0, // 控制 checkbox all 的功能
-        };
-
-        for (let key in def) {
-            if( typeof(params[key])!=="undefined" ) {
-                def[key] = params[key];
-            }
-        }
-        return def;
-    },
-
-    resetAllCheckbox()
-    {
-        let headKey = this.state.headKey;
-        let that = this;
-        let key;
-        utils.each( this.state.rows, function(index, obj) {
-            key = obj[headKey];
-            that.setCheckbox(key, false);
-        });
+        return this.props.rows[index][this.props.headKey].toString();
     },
 
     /**
@@ -216,14 +238,14 @@ let TableChoose = React.createClass({
     },
 
     validate() {
-        if ( !this.state.headKey ) {
+        if ( !this.props.headKey ) {
             console.log('table error: element headKey not found!');
             return false;
         }
-        if( Object.prototype.toString.call( this.state.heads ) !== '[object Array]' ) {
+        if( Object.prototype.toString.call( this.props.heads ) !== '[object Array]' ) {
             return false;
         }
-        if( Object.prototype.toString.call( this.state.rows ) !== '[object Array]' ) {
+        if( Object.prototype.toString.call( this.props.rows ) !== '[object Array]' ) {
             return false;
         }
         return true;
@@ -237,11 +259,6 @@ let TableChoose = React.createClass({
      */
     handleCheck: function(key, event) {
         this.setCheckbox(key, event.target.checked);
-
-        if ( !this.props.data.listenCheck ) {
-            return;
-        }
-        this.props.data.listenCheck(key, event.target.checked);
     },
 
     handleCheckAll: function() {
@@ -264,13 +281,15 @@ let TableChoose = React.createClass({
             <span>
                 <table className="table table-condensed table-bordered table-hover">
                     <thead>
-                        <th style={style}>
-                            <i className={icon} onClick={this.handleCheckAll}></i>
-                        </th>
-                        {this.state.heads.map(this.renderHead)}
+                        <tr>
+                            <th style={style}>
+                                <i className={icon} onClick={this.handleCheckAll}></i>
+                            </th>
+                            {this.props.heads.map(this.renderHead)}
+                        </tr>
                     </thead>
                     <tbody>
-                        {this.state.rows.map(this.renderRow)}
+                        {this.props.rows.map(this.renderRow)}
                     </tbody>
                 </table>
             </span>
@@ -279,7 +298,7 @@ let TableChoose = React.createClass({
 
     renderRow: function(row, i) {
         let key     = this.getRowKey(i);
-        let data    = this._sortRowByHeadToArray(row, this.state.heads);
+        let data    = this._sortRowByHeadToArray(row, this.props.heads);
         let color   = this.getCheckbox(key) ? 'info' : '';
         return (
             <tr key={i} className={color}>

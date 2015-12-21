@@ -3,41 +3,32 @@
         <div class="col-md-10">
 
             <div id="content"></div>
+            <p>
+                <?php outputCode(getReadme()); ?>
+            </p>
 
         </div>
         <div class="col-md-2">
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">相依性</h3>
-                </div>
-                <div class="panel-body">
-                    ComboBox
-                </div>
-            </div>
+            <?php echo getInfoHtml('1.0', [
+                ['ComboBox (內置)'],
+                ['utils'],
+            ]); ?>
 
         </div>
     </div>
 
-
-    <script type="text/jsx" src="src/InputDate/inputDate.jsx"></script>
-    <script type="text/jsx">
+    <script type="text/babel">
         var Main = React.createClass({
-            // --------------------------------------------------------------------------------
-            // event
-            // --------------------------------------------------------------------------------
-
-            // --------------------------------------------------------------------------------
             render() {
                 return (
                     <div>
                         <div>
-                            <InputDate name="happyDate" />
+                            <ui.InputDate name="happyDate" />
                         </div>
                     </div>
                 );
             },
         });
-        React.render(<Main />, document.getElementById('content'));
+        ReactDOM.render(<Main />, document.getElementById('content'));
     </script>
-

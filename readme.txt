@@ -1,9 +1,12 @@
 React UI
 
-�sĶ js
+編譯 js
     jsx to js
     ES6 to ES5
-    live reload
+    gulp live reload
+
+php
+    php file reload
 
 install by package.json
     npm install -g gulp

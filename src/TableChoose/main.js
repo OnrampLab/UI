@@ -1,3 +1,4 @@
+
 (function () {
     'use strict';
 
@@ -17,7 +18,6 @@
                         { id: 27, name: "iPhone 5",    price: 399.99, age: 5                        },
                         { id: 28, name: "Nexus 7",     price: 199.99, age: 90                       },
                 ],
-                listenCheck: this.showCheck,
             }
         },
 
@@ -28,16 +28,16 @@
                 { id: 13, name: "iPhone 6",   price: 299,   age: 33 },
                 { id: 14, name: "iPhone 6s",  price: 399,   age: 80 },
             ];
+            // 全部設定進去, react 會自行處理效能
             this.setState({"table": this.state.table});
         },
 
         showCheck(key, value) {
-            // console.log( this.refs.theTable.getInfo() );
             console.log( key, value );
         },
 
         show() {
-            console.log( this.refs.theTable.getInfo() );
+            console.log( this.refs.myTable.getInfo() );
         },
 
         // --------------------------------------------------------------------------------
@@ -50,7 +50,7 @@
         render() {
             return (
                 <div>
-                    <TableChoose data={this.state.table} ref="theTable" />
+                    <ui.TableChoose {...this.state.table} listenCheck={this.showCheck} ref="myTable" />
 
                     <button className="btn btn-primary" onClick={this.show}>
                         Show Information
@@ -63,6 +63,6 @@
             );
         },
     });
-    React.render(<Main />, document.getElementById('content'));
+    ReactDOM.render(<Main />, document.getElementById('content'));
 
 })();

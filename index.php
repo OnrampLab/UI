@@ -1,29 +1,23 @@
 <?php
+    date_default_timezone_set('Asia/Taipei');
     header('Content-Type: text/html; charset=utf-8');
     define('BASE_PATH',__DIR__);
     include 'lib/helper.php';
 
-    $mainPage = get('m', 'Home');
-    $subPage  = get('s');
-    if ( !$subPage ) {
-        $subPage = getDefaultSubMenu($mainPage);
-    }
+    list( $mainPage, $subPage ) = getCurrentPageInfo();
+
 ?><!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
     <title>Example</title>
-    <script src="dist/jquery/jquery-2.0.3.js"></script>
-    <script src="dist/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="dist/bootstrap-3.3.5-dist/css/bootstrap.min.css" />
+    <script src="build/assets/jquery/jquery.js"></script>
+    <script src="build/assets/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="build/assets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="build/assets/font-awesome/css/font-awesome.css" />
 
-    <link rel="stylesheet" href="dist/font-awesome-4.4.0/css/font-awesome.css" />
-
-    <script src="dist/react-0.13.3/build/react.js"></script>
-    <script src="dist/react-0.13.3/build/JSXTransformer.js"></script>
-    <script src="dist/react-bootstrap/react-bootstrap.min.js"></script>
-
-    <script src="dist/utils.js"></script>
+    <script src="build/react-bundle.js"></script>
+    <script src="build/react-ui.js"></script>
   </head>
   <body>
 
@@ -70,20 +64,17 @@
 
             </div>
             <div class="col-md-10">
-
-                <?php getContent($mainPage, $subPage); ?>
-
+                <?php showContent($mainPage, $subPage); ?>
+                <?php showMainJs($mainPage, $subPage); ?>
             </div>
         </div>
-
-
     </section>
 
   </body>
 </html>
 <?php
 
-    function getContent( $mainPage, $subPage )
+    function showContent( $mainPage, $subPage )
     {
         $path = getMenuPath($mainPage, $subPage);
         if ( $path ) {
@@ -92,5 +83,14 @@
                 include $file;
             }
         }
+    }
+
+    function showMainJs( $mainPage, $subPage )
+    {
+        $pathfile = getMenuPath($mainPage, $subPage) . '/main.js';
+        if ( !file_exists($pathfile) ) {
+            return;
+        }
+        echo '<'. 'script type="text/babel" src="'. $pathfile .'"></script>';
     }
 

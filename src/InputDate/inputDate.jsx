@@ -9,13 +9,14 @@
  *          <InputDate name="birthDate" />
  *
  */
-let InputDate = React.createClass({
+let ui = ui || {};
+ui.InputDate = React.createClass({
 
+    // TODO: 請分離 state & props
     getInitialState() {
         return {
             'name': this.props.name,
             'combobox': {
-                'actionName': this.props.name,
                 'width': '',
                 'options': [],
             },
@@ -25,6 +26,70 @@ let InputDate = React.createClass({
     // --------------------------------------------------------------------------------
     // helper
     // --------------------------------------------------------------------------------
+    getElementWidth() {
+        let dom = this.refs.container;
+        return dom.offsetWidth;
+    },
+
+    setElementValue(value) {
+        let dom = this.refs.container;
+        dom.value = value;
+    },
+
+    getElementValue() {
+        let dom = this.refs.container;
+        return dom.value;
+    },
+
+    /**
+     *  驗証日期格式 yyyy-mm-dd
+     */
+    isValidDate(date) {
+        var matches = /^(\d{4})[-\/](\d{2})[-\/](\d{2})$/.exec(date);
+        if (matches == null) {
+            return false;
+        }
+        var d = matches[3];
+        var m = matches[2] - 1;
+        var y = matches[1];
+        var composedDate = new Date(y, m, d);
+        return composedDate.getDate() == d &&
+               composedDate.getMonth() == m &&
+               composedDate.getFullYear() == y;
+    },
+
+    /**
+     *  為日期 加 one day
+     */
+    getDatePlus(originDate, numDay) {
+        var numDay = numDay || 1;
+
+        let matches = /^(\d{4})[-\/](\d{2})[-\/](\d{2})$/.exec(originDate);
+        if (matches == null) {
+            return false;
+        }
+
+        let date = new Date(originDate);
+        date.setDate( date.getDate() + numDay );
+
+        let month = (date.getMonth()+1).toString();
+        if ( month.length==1 ) {
+            month = '0' + month;
+        }
+        let day = date.getDate().toString();
+        if ( day.length==1 ) {
+            day = '0' + day;
+        }
+
+        return date.getFullYear() + '-' + month + '-' + day;
+    },
+
+    /**
+     *  為日期 減 one day
+     */
+    getDateMinus(date) {
+        return this.getDatePlus(date, -1);
+    },
 
     // --------------------------------------------------------------------------------
     // event
@@ -32,15 +97,15 @@ let InputDate = React.createClass({
     handleKey: function(event) {
 
         // update combobox width
-        let $inputBox = $('input[name="'+ this.props.name +'"]');
-        this.state.combobox.width = $inputBox.css('width');
+        this.state.combobox.width = this.getElementWidth();
 
         // 輸入 ↓ 的時候, 要跳到 ComboBox, 並且預選第一個項目
         if ( event.keyCode == 40 && this.state.combobox.options.length > 0 ) {
-            React.findDOMNode(this.refs.box).focus();
-            React.findDOMNode(this.refs.box).selectedIndex = 0;
+            ReactDOM.findDOMNode(this.refs.box).focus();
+            ReactDOM.findDOMNode(this.refs.box).selectedIndex = 0;
+
         }
-        // 輸入 8 個數字時
+        // 輸入 8 個數字時, 直接完成 yyyy-mm-dd 的格式設定
         else if( event.target.value.length == 8 && -1 === event.target.value.indexOf('-') ) {
 
             let result = '';
@@ -61,31 +126,44 @@ let InputDate = React.createClass({
                        + '-'
                        + event.target.value.substr(2,2)
             }
+            this.setElementValue(result);
+        }
+        // 輸入英文字 的時候
+        else if( event.target.value.match(/[a-z]/ig) ) {
 
-            this.state.combobox.options = [
-                [result,result]
+            let today    = utils.getDate( new Date() );
+            let tomorrow = utils.getDate( new Date( new Date().getTime() + (86400 * 1000) ) );
+            let options  = [
+                [today,    today    + ' (today)'],
+                [tomorrow, tomorrow + ' (tomorrow)'],
             ];
+
+            // update combobox options
+            this.state.combobox.options = options;
 
             // update state
             this.setState({'combobox': this.state.combobox});
         }
-        // 輸入英文字 的時候
-        else if( event.target.value.match(/[a-z]/ig) ) {
-            let date    = new Date();
-            let yyyy    = date.getFullYear().toString();
-            let mm      = (date.getMonth()+1).toString();
-            let dd      = date.getDate().toString();
-            let format  = yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]);
-            let options = [
-                [format, format + ' (today)'],
-            ];
+        // 當日期完整時, 輸入 ↑ 表示加日期
+        else if ( event.keyCode == 38) {
+            let value = this.getElementValue();
+            if ( !this.isValidDate(value) ) {
+                return;
+            }
+            this.setElementValue( this.getDatePlus(value) );
 
-            // update combobox options
-            let combobox = this.state.combobox;
-            combobox.options = options;
-
-            // update state
-            this.setState({'combobox': combobox});
+            //  游標位置
+            // event.stopPropagation()
+            // event.preventDefault();
+            // console.log(event.target.selectionStart);
+        }
+        // 當日期完整時, 輸入 ↓ 表示減日期
+        else if ( event.keyCode == 40) {
+            let value = this.getElementValue();
+            if ( !this.isValidDate(value) ) {
+                return;
+            }
+            this.setElementValue( this.getDateMinus(value) );
         }
         else {
             this.state.combobox.options = [];
@@ -94,14 +172,21 @@ let InputDate = React.createClass({
 
     },
 
+    /**
+     *  comboBox 選取之後觸發的 event
+     */
+    handleChoose(value) {
+        this.setElementValue(value);
+    },
+
     // --------------------------------------------------------------------------------
     // render
     // --------------------------------------------------------------------------------
     render() {
         return (
             <span>
-                <input type="text" name={this.props.name} ref={this.props.name} onKeyUp={this.handleKey} maxLength="10" placeholder="yyyy-mm-dd" />
-                <ComboBox data={this.state.combobox} ref="box" />
+                <input type="text" name={this.props.name} ref="container" onKeyUp={this.handleKey} maxLength="10" placeholder="yyyy-mm-dd" />
+                <ui.InputDateComboBox data={this.state.combobox} listenChoose={this.handleChoose} ref="box" />
             </span>
         );
     },
@@ -112,7 +197,7 @@ let InputDate = React.createClass({
 
 
 
-let ComboBox = React.createClass({
+ui.InputDateComboBox = React.createClass({
 
     getInitialState() {
         return this.getDefault( this.props.data );
@@ -134,7 +219,6 @@ let ComboBox = React.createClass({
      */
     getDefault(params) {
         let def = {
-            'actionName': '',
             'width': '',
             'maxOption': 5,
             'options': [],
@@ -164,17 +248,13 @@ let ComboBox = React.createClass({
         let ENTER_KEY = 13;
 
         if ( event.keyCode == ENTER_KEY ) {
-            let $inputBox = $('input[name="'+ this.state.actionName +'"]');
-            // TODO: 這應該是錯誤的寫法!! 請更正!!
-            $inputBox.val( event.target.value );
+            this.props.listenChoose(event.target.value);
             this.setState({options:[]});
         }
     },
 
     handClick: function(event) {
-        let $inputBox = $('input[name="'+ this.state.actionName +'"]');
-        // TODO: 這應該是錯誤的寫法!! 請更正!!
-        $inputBox.val( event.target.value );
+        this.props.listenChoose(event.target.value);
         this.setState({options:[]});
     },
 
@@ -182,7 +262,7 @@ let ComboBox = React.createClass({
     // render
     // --------------------------------------------------------------------------------
     render() {
-        let id          = this.getUniqueId('combobox-id-');
+        let id          = this.getUniqueId('inputdate-combobox-id-');
         let options     = this.state.options;
         let selectSize  = (options.length > this.state.maxOption ? this.state.maxOption : options.length);
 

@@ -1,8 +1,7 @@
 <ul>
     <li>utils</li>
     <ul>
-        <li>該工具只用於 React Component</li>
-        <li>"不要" 在 React Component 以外的地方使用</li>
+        <li>該工具 "僅只" 用於 React Component</li>
     </ul>
 </ul>
 
@@ -29,7 +28,7 @@
             }
         }
         if ( !message ) {
-            message = tmp;
+            message = Object.prototype.toString.call(tmp) + ' ' + tmp;
         }
         else {
             message += "\n" + tmp;
@@ -87,6 +86,52 @@
 
     <p>
         <pre class="js-show">
+var arr = [
+    {'name': 'john',    'age': 12},
+    {'name': 'vivian',  'age': 20},
+    {'name': 'ken',     'age': 60},
+    {'name': 'hello',   'age': 12},
+    {'name': 'world',   'age': 88}
+];
+echo( utils.indexOf(arr, 'age', 12) );</pre>
+        <pre class="display"></pre>
+    </p>
+
+    <p>
+        <pre class="js-show">
+var arr = [
+    {'name': 'john',    'age': 12},
+    {'name': 'vivian',  'age': 20},
+    {'name': 'ken',     'age': 60},
+    {'name': 'hello',   'age': 12},
+    {'name': 'world'             }
+];
+echo( utils.writeIndexOf(arr, 'age', 20) );
+console.log( arr );</pre>
+        <pre class="display"></pre>
+    </p>
+
+    <p>
+        <pre class="js-show">
+//
+// each array
+//
+var list = [
+    'john',
+    '2000-01-01',
+    Math.floor(Math.random()*100 + 1)
+];
+utils.each(list, function(key, value){ 
+    echo(key, value);
+})</pre>
+        <pre class="display"></pre>
+    </p>
+
+    <p>
+        <pre class="js-show">
+//
+// each object
+//
 var obj = {
     name: 'john',
     birth: new Date(Date.UTC(2000, 12-1, 31, 23, 59, 59)).toISOString(),
@@ -100,6 +145,9 @@ utils.each(obj, function(key, value){
 
     <p>
         <pre class="js-show">
+//
+// each array
+//
 var list = [
     'john',
     '2000-01-01',

@@ -1,44 +1,24 @@
 'use strict';
 
-let TableShow = React.createClass({
+let ui = ui || {};
+ui.TableShow = React.createClass({
 
-    getInitialState() {
-        return this.getDefault( this.props.data );
-    },
-
-    /**
-     *  當一個掛載的組件接收到新的 props 的時候被調用
-     */
-    componentWillReceiveProps(nextProps) {
-        this.state = this.getDefault( nextProps.data );
+    getDefaultProps: function() {
+        return {
+            heads: [],
+            rows: [],
+        };
     },
 
     // --------------------------------------------------------------------------------
     // helper
     // --------------------------------------------------------------------------------
-    /**
-     *  取得預設值
-     *  如果參數中有相同的 key, 則覆蓋該值
-     */
-    getDefault(params) {
-        let def = {
-            heads: [],
-            rows: [],
-        };
-
-        for (let key in def) {
-            if( typeof(params[key])!=="undefined" ) {
-                def[key] = params[key];
-            }
-        }
-        return def;
-    },
 
     validate() {
-        if( Object.prototype.toString.call( this.state.heads ) !== '[object Array]' ) {
+        if( Object.prototype.toString.call( this.props.heads ) !== '[object Array]' ) {
             return false;
         }
-        if( Object.prototype.toString.call( this.state.rows ) !== '[object Array]' ) {
+        if( Object.prototype.toString.call( this.props.rows ) !== '[object Array]' ) {
             return false;
         }
         return true;
@@ -69,10 +49,12 @@ let TableShow = React.createClass({
             <span>
                 <table className="table table-condensed table-bordered table-striped">
                     <thead>
-                        {this.state.heads.map(this.renderHead)}
+                        <tr>
+                            {this.props.heads.map(this.renderHead)}
+                        </tr>
                     </thead>
                     <tbody>
-                        {this.state.rows.map(this.renderRow)}
+                        {this.props.rows.map(this.renderRow)}
                     </tbody>
                 </table>
             </span>
@@ -81,7 +63,7 @@ let TableShow = React.createClass({
 
     renderRow: function(row, i) {
         row = this.handleRow(row);
-        let data = this._sortRowByHeadToArray(row, this.state.heads);
+        let data = this._sortRowByHeadToArray(row, this.props.heads);
         return (
             <tr key={i}>
                 {data.map(this.renderCell)}

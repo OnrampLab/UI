@@ -1,9 +1,13 @@
+var path        = require("path");
+
 var gulp        = require("gulp"),
     connect     = require('gulp-connect'),
     notify      = require('gulp-notify'),
     babel       = require("gulp-babel"),
     jsx         = require('react-jsx-anywhere/gulp')
     concat      = require('gulp-concat');
+
+var config = require("./config/config.json");
 
 var watchList = [
     'dist/utils.js',
@@ -25,33 +29,58 @@ gulp.task('list', function () {
         .pipe(connect.reload());
 });
 gulp.task('watch', function () {
-    gulp.watch( watchList, ['list', 'compile']);
+    gulp.watch( watchList, ['list', 'compileUi']);
 });
 
-gulp.task('compile', function () {
-    return gulp.src(['dist/utils.js', 'src/**/*.jsx'])
+gulp.task('compileUi', function () {
+    return gulp.src(['dist/utils.js', 'src/**/*.jsx', '!src/**/main.jsx'])
         .pipe(jsx())
         .pipe(babel())
         .on('error', notify.onError({
-            title: 'babel to ES5:',
-            message: 'Failed'
+            title: 'babel ES6 to ES5:',
+            message: "<%= error %>"
         }))
-        .pipe(concat('react-stargazer.js'))
+        .pipe(concat(getUiName()))
         .pipe(gulp.dest("build"));
+});
+
+gulp.task('compileBundle', function () {
+    return gulp.src([
+            './node_modules/react/dist/react.min.js',
+            './node_modules/react-dom/dist/react-dom.min.js',
+            './node_modules/babel-core/browser.min.js',
+        ])
+        .pipe(concat(getBundleName()))
+        .pipe(gulp.dest("build"));
+});
+
+/**
+ *  公用程式
+ *  注意, 這些檔案 "沒有" watch
+ */
+gulp.task('toAssets', function () {
+    gulp.src('./node_modules/react/dist/**')        .pipe(gulp.dest("build/assets/react/"));
+    gulp.src('./node_modules/react-dom/dist/**')    .pipe(gulp.dest("build/assets/react-dom/"));
+    gulp.src('./node_modules/babel-core/browser.*') .pipe(gulp.dest("build/assets/babel-core/"));
+    gulp.src('./node_modules/bootstrap/dist/**')    .pipe(gulp.dest("build/assets/bootstrap/"));
+    gulp.src('./node_modules/font-awesome/css/**')  .pipe(gulp.dest("build/assets/font-awesome/css/"));
+    gulp.src('./node_modules/font-awesome/fonts/**').pipe(gulp.dest("build/assets/font-awesome/fonts/"));
+    gulp.src('./node_modules/jquery/dist/*')        .pipe(gulp.dest("build/assets/jquery/"));
 });
 
 // --------------------------------------------------------------------------------
 
 gulp.task('default', function() {
-    console.log(getBundleName());
-    gulp.run('connect','watch','compile');
+    console.log('---- start ----');
+    gulp.run('connect','watch','toAssets','compileUi','compileBundle');
 });
 
 // --------------------------------------------------------------------------------
 
-var getBundleName = function () {
-    var version = require('./package.json').version;
-    var name = require('./package.json').bundleName;
-    return name + '.' + version + '.' + 'js';
+var getUiName = function () {
+    return 'react-ui.js';
 };
 
+var getBundleName = function () {
+    return 'react-bundle.js';
+};

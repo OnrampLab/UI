@@ -1,19 +1,44 @@
 'use strict';
 
-let Pagination = React.createClass({
+let ui = ui || {};
+ui.Pagination = React.createClass({
     propTypes: {
-        handlePage: React.PropTypes.func,
+        // props
+        listenClick:    React.PropTypes.func,
+        pageShowCount:  React.PropTypes.number,
+        rowCount:       React.PropTypes.number.isRequired,
+        gap:            React.PropTypes.number,
+        show:           React.PropTypes.string,
+        showPrev:       React.PropTypes.node,
+        showNext:       React.PropTypes.node,
+        showFirst:      React.PropTypes.node,
+        showLast:       React.PropTypes.node,
+        // state
+        page:           React.PropTypes.number,
+    },
+
+    getDefaultProps: function() {
+        return {
+            pageShowCount:  15,                         // 每頁顯示幾筆資料 (用來計算總共有多少page)
+            rowCount:       0,                          // 總筆數
+            gap:            5,                          // 顯示多少可點擊頁數  << < 1 2 3 4 5 > >>
+            show:           'prev next page',           // 'prev next page first last'
+            showPrev:       <span>&lsaquo; Prev</span>,
+            showNext:       <span>Next &rsaquo;</span>,
+            showFirst:      <span>&laquo;</span>,
+            showLast:       <span>&raquo;</span>,
+        };
     },
 
     getInitialState() {
-        return this.getDefault( this.props.data );
+        return this.getDefault(this.props);
     },
 
     /**
      *  當一個掛載的組件接收到新的 props 的時候被調用
      */
     componentWillReceiveProps(nextProps) {
-        this.state = this.getDefault( nextProps.data );
+        this.state = this.getDefault(nextProps);
     },
 
     // --------------------------------------------------------------------------------
@@ -25,29 +50,28 @@ let Pagination = React.createClass({
      */
     getDefault(params) {
         let def = {
-            page: 1,
-            pageShowCount: 10,  // 每頁顯示幾筆資料 (用來計算總共有多少page)
-            rowCount: 0,        // 總筆數
-            prev: true,
-            next: true,
-            first: false,
-            last: false,
-            gap: 5,             // 顯示5個  << < 1 2 3 4 5 > >>
+            page: params.page ? params.page : 1,
         };
-
-        for (let key in def) {
-            if( typeof(params[key])!=="undefined" ) {
-                def[key] = params[key];
-            }
-        }
         return def;
+    },
+
+    /**
+     *  檢查是否有指定字串
+     *      example:
+     *          "prev next page first last"
+     */
+    hasTag(tag) {
+        if ( -1 !== this.props.show.indexOf(tag) ) {
+            return true;
+        }
+        return false;
     },
 
     /**
      *  總共幾頁
      */
     getTotalPage() {
-        return Math.ceil(this.state.rowCount / this.state.pageShowCount);
+        return Math.ceil(this.props.rowCount / this.props.pageShowCount);
     },
 
     /**
@@ -60,17 +84,17 @@ let Pagination = React.createClass({
     getShowPages() {
         let total = this.getTotalPage();
         let start, stop;
-        if ( total >= this.state.gap ) {
+        if ( total >= this.props.gap ) {
             // 顯示 gap 的數量
             // 必須要計算 active page 在中間的位置
-            start = this.state.page - Math.floor(this.state.gap/2);
+            start = this.state.page - Math.floor(this.props.gap/2);
             if ( start < 1 ) {
                 start = 1;
             }
-            stop = start + this.state.gap - 1;
+            stop = start + this.props.gap - 1;
             if ( stop > total ) {
                 stop  = total;
-                start = total-this.state.gap+1; // 開始的頁數要回補, 不然在尾頁的數量會少於 gap
+                start = total - this.props.gap + 1;  // 開始的頁數要回補, 不然在尾頁的數量會少於 gap
             }
         }
         else {
@@ -102,8 +126,8 @@ let Pagination = React.createClass({
         }
 
         // custom event
-        if (this.props.handlePage) {
-            this.props.handlePage(p);
+        if (this.props.listenClick) {
+            this.props.listenClick(p);
         }
 
         this.setState({page: p});
@@ -113,93 +137,109 @@ let Pagination = React.createClass({
     // render
     // --------------------------------------------------------------------------------
     render() {
+        let tags = this.props.show.split(' ');
+        let order = [];
+        for ( let index in tags ) {
+            switch (tags[index]) {
+                case 'page':  order.push( this.getShowPages().map(this.renderPage) );  break;
+                case 'prev':  order.push( this.renderPrev()     );  break;
+                case 'next':  order.push( this.renderNext()     );  break;
+                case 'first': order.push( this.renderFirst()    );  break;
+                case 'last':  order.push( this.renderLast()     );  break;
+            }
+        }
         return (
-            <ul className="pagination">
-                {this.renderPrev()}
-                {this.renderNext()}
-                {this.getShowPages().map(this.renderPage)}
-                {this.renderFirst()}
-                {this.renderLast()}
-            </ul>
+            <ul className="pagination">{order}</ul>
         );
     },
 
     renderPrev: function() {
-        if ( !this.state.prev ) {
+        if ( !this.hasTag('prev') ) {
             return;
         }
         if ( this.state.page === 1 ) {
             return (
-                <li className="disabled">
-                    <a href="#">&laquo; Prev</a>
+                <li key="prev" className="disabled">
+                    <a href="javascript:void(0)">{this.props.showPrev}</a>
                 </li>
             );
         }
         return (
-            <li onClick={this.handlePage.bind(this, this.state.page-1)}>
-                <a href="#">&laquo; Prev</a>
+            <li key="prev" onClick={this.handlePage.bind(this, this.state.page-1)}>
+                <a href="javascript:void(0)">{this.props.showPrev}</a>
             </li>
         );
     },
 
     renderNext: function() {
-        if ( !this.state.next ) {
+        if ( !this.hasTag('next') ) {
             return;
         }
         if ( this.state.page === this.getTotalPage() ) {
             return (
-                <li className="disabled">
-                    <a href="#">Next &raquo;</a>
+                <li key="next" className="disabled">
+                    <a href="javascript:void(0)">{this.props.showNext}</a>
                 </li>
             );
         }
         return (
-            <li onClick={this.handlePage.bind(this, this.state.page+1)}>
-                <a href="#">Next &raquo;</a>
+            <li key="next" onClick={this.handlePage.bind(this, this.state.page+1)}>
+                <a href="javascript:void(0)">{this.props.showNext}</a>
             </li>
         );
     },
 
     renderFirst: function() {
-        if ( !this.state.first ) {
+        if ( !this.hasTag('first') ) {
             return;
         }
-        if ( -1 !== this.getShowPages().indexOf(1) ) {
-            return;
+        if ( this.state.page === 1 ) {
+            return (
+                <li key="first" className="disabled">
+                    <a href="javascript:void(0)">{this.props.showFirst}</a>
+                </li>
+            );
         }
         return (
-            <li onClick={this.handlePage.bind(this, 1)}>
-                <a href="#">...1</a>
+            <li key="first" onClick={this.handlePage.bind(this, 1)}>
+                <a href="javascript:void(0)">{this.props.showFirst}</a>
             </li>
         );
     },
 
     renderLast: function() {
-        if ( !this.state.last ) {
+        if ( !this.hasTag('last') ) {
             return;
         }
         let total = this.getTotalPage();
-        if ( -1 !== this.getShowPages().indexOf(total) ) {
-            return;
+        if ( this.state.page === total ) {
+            return (
+                <li key="last" className="disabled">
+                    <a href="javascript:void(0)">{this.props.showLast}</a>
+                </li>
+            );
         }
         return (
-            <li onClick={this.handlePage.bind(this, total)}>
-                <a href="#">...{total}</a>
+            <li key="last" onClick={this.handlePage.bind(this, total)}>
+                <a href="javascript:void(0)">{this.props.showLast}</a>
             </li>
         );
     },
 
     renderPage: function(n, i) {
+        if ( !this.hasTag('page') ) {
+            return;
+        }
         if ( this.state.page === n ) {
             return (
                 <li key={i} className="active">
-                    <a href='#'>{n}</a>
+                    <a href="javascript:void(0)">{n}</a>
                 </li>
             );
         }
         return (
             <li key={i} onClick={this.handlePage.bind(this, n)}>
-                <a href='#'>{n}</a>
+                <a href="javascript:void(0)">{n}</a>
             </li>
         );
     }
