@@ -15,14 +15,22 @@ ui.Selection = React.createClass({
     // helper
     // --------------------------------------------------------------------------------
     
-    
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    /**
+     *  
+     */
+    handleChange: function() {
+        this.setState({'selectedValue': this.refs.menu.value});
+    },
 
     // --------------------------------------------------------------------------------
     // render
     // --------------------------------------------------------------------------------
     render() {
         return (
-            <select ref="menu" >
+            <select ref="menu" onChange={this.handleChange.bind(this)}>
                 {this.props.myoptions.map((o, i) => (
                     <option key={i} value={o.selectValue}>{o.selectLabel}</option>
                 ))}
