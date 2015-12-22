@@ -1120,7 +1120,7 @@ ui.Pagination = React.createClass({
 
 var ui = ui || {};
 ui.Selection = React.createClass({
-    displayName: "Selection",
+    displayName: 'Selection',
 
     propTypes: {
         // props
@@ -1136,15 +1136,25 @@ ui.Selection = React.createClass({
     // --------------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    /**
+     *  
+     */
+    handleChange: function handleChange() {
+        this.setState({ 'selectedValue': this.refs.menu.value });
+    },
+
+    // --------------------------------------------------------------------------------
     // render
     // --------------------------------------------------------------------------------
     render: function render() {
         return React.createElement(
-            "select",
-            { ref: "menu" },
+            'select',
+            { ref: 'menu', onChange: this.handleChange.bind(this) },
             this.props.myoptions.map(function (o, i) {
                 return React.createElement(
-                    "option",
+                    'option',
                     { key: i, value: o.selectValue },
                     o.selectLabel
                 );
