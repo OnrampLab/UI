@@ -7,6 +7,8 @@
         ["Table",   "TableShow",    "src/TableShow"     ],
         ["Table",   "TableChoose",  "src/TableChoose"   ],
         ["Form",    "InputDate",    "src/InputDate"     ],
+        ["Form",    "Autocomplete", "src/Autocomplete"  ],
+        ["Form",    "Textarea",     "src/Textarea"      ],
         ["Message", "Info",         "src/Info"          ],
         ["Other",   "Pagination",   "src/Pagination"    ],
         ["Other",   "Selection",    "src/Selection"     ]
