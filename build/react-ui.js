@@ -2114,6 +2114,148 @@ ui.WmsCustomer = React.createClass({
 'use strict';
 
 /**
+ *  WmsEmaileditor
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsEmaileditor />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsEmaileditor = React.createClass({
+    displayName: "WmsEmaileditor",
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            heads: [],
+            rows: [],
+            show: ""
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {},
+
+    handleLink: function handleLink(i) {
+        if (this.props.listenLink) {
+            this.props.listenLink(i);
+        }
+    },
+
+    handleRow: function handleRow(row) {
+        if (this.props.handleRow) {
+            row = this.props.handleRow(row);
+        }
+        return row;
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "span",
+            null,
+            React.createElement(
+                "div",
+                null,
+                this.props.rows[0].subject
+            ),
+            React.createElement(
+                "table",
+                { className: "table table-condensed" },
+                React.createElement(
+                    "tbody",
+                    null,
+                    this.props.rows.map(this.renderRow)
+                )
+            )
+        );
+    },
+
+    renderRow: function renderRow(row, i) {
+        row = this.handleRow(row);
+        var root = this._sortRowByHeadToArray(row, this.props.roots);
+        var subRoots = this._sortRowByHeadToArray(row, this.props.subRoots);
+        var biundLink = this.handleLink.bind(this, i);
+
+        return [React.createElement(
+            "tr",
+            { "data-index": i, className: "active", onClick: biundLink },
+            root.map(this.renderCell)
+        ), React.createElement(
+            "tr",
+            { className: row.show },
+            this.renderSubRoots(subRoots)
+        ), React.createElement(
+            "tr",
+            { className: row.show },
+            this.renderContent(row)
+        )];
+    },
+
+    renderCell: function renderCell(data, i) {
+        return React.createElement(
+            "td",
+            null,
+            React.createElement(
+                "b",
+                null,
+                data
+            )
+        );
+    },
+
+    renderSubRoots: function renderSubRoots(subRoots, i) {
+        return React.createElement(
+            "td",
+            { colSpan: "3" },
+            React.createElement(
+                "b",
+                null,
+                subRoots[0]
+            ),
+            " Send to ",
+            React.createElement(
+                "b",
+                null,
+                "<",
+                subRoots[1],
+                ">"
+            )
+        );
+    },
+
+    renderContent: function renderContent(row, i) {
+        return React.createElement(
+            "td",
+            { colSpan: "3" },
+            row["body_snippet"]
+        );
+    },
+
+    _sortRowByHeadToArray: function _sortRowByHeadToArray(row, heads) {
+        var data = [];
+        var index = 0;
+        for (var idx in heads) {
+            var _name = heads[idx];
+            data[index++] = [row[_name]];
+        }
+        return data;
+    }
+});
+'use strict';
+
+/**
  *  WmsEmaillist
  *
  *      params:
@@ -2310,7 +2452,7 @@ ui.WmsEmailparent = React.createClass({
         var root = this._sortRowByHeadToArray(row, this.props.roots);
         var subRoots = this._sortRowByHeadToArray(row, this.props.subRoots);
         var biundLink = this.handleLink.bind(this, i);
-        console.log(this.props);
+
         return [React.createElement(
             "tr",
             { "data-index": i, className: "active", onClick: biundLink },

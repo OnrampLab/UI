@@ -69,7 +69,7 @@ ui.WmsEmailparent = React.createClass({
         let root = this._sortRowByHeadToArray(row, this.props.roots);
         let subRoots = this._sortRowByHeadToArray(row, this.props.subRoots);
         let biundLink = this.handleLink.bind(this, i);
-        console.log(this.props);
+        
         return (
             [<tr data-index={i} className="active" onClick={biundLink}>
                 {root.map(this.renderCell)}

@@ -12,6 +12,7 @@
 
             <?php echo getInfoHtml('0.1', [
                 ['Bootstrap'],
+                ['Lodash'],
             ]); ?>
 
         </div>

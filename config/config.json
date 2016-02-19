@@ -8,6 +8,7 @@
         ["Table",   "TableChoose",  "src/TableChoose"   ],
         ["Table",   "WmsEmaillist", "src/WmsEmaillist"  ],
         ["Table",   "WmsEmailparent", "src/WmsEmailparent"],
+        ["Table",   "WmsEmaileditor", "src/WmsEmaileditor"],
         ["Form",    "InputDate",    "src/InputDate"     ],
         ["Form",    "InputLabel",   "src/InputLabel"    ],
         ["Form",    "Autocomplete", "src/Autocomplete"  ],
