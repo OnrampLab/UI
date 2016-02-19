@@ -13,6 +13,7 @@
     <title>Example</title>
     <script src="build/assets/jquery/jquery.js"></script>
     <script src="build/assets/bootstrap/js/bootstrap.js"></script>
+    <script src="build/assets/lodash/lodash.js"></script>
     <link rel="stylesheet" href="build/assets/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="build/assets/font-awesome/css/font-awesome.css" />
 

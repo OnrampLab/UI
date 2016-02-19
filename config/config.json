@@ -6,12 +6,16 @@
         ["Button",  "Breadcrumb",   "src/Breadcrumb"    ],
         ["Table",   "TableShow",    "src/TableShow"     ],
         ["Table",   "TableChoose",  "src/TableChoose"   ],
+        ["Table",   "WmsEmaillist", "src/WmsEmaillist"  ],
+        ["Table",   "WmsEmailparent", "src/WmsEmailparent"],
         ["Form",    "InputDate",    "src/InputDate"     ],
+        ["Form",    "InputLabel",   "src/InputLabel"    ],
         ["Form",    "Autocomplete", "src/Autocomplete"  ],
         ["Form",    "AutocompleteMuti", "src/AutocompleteMuti"  ],
         ["Form",    "Textarea",     "src/Textarea"      ],
         ["Message", "Info",         "src/Info"          ],
         ["Other",   "Pagination",   "src/Pagination"    ],
-        ["Other",   "Selection",    "src/Selection"     ]
+        ["Other",   "Selection",    "src/Selection"     ],
+        ["Combo",   "WmsCustomer",  "src/WmsCustomer"   ] 
     ]
 }

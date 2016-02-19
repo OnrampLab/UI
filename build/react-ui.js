@@ -972,6 +972,67 @@ ui.InputDateComboBox = React.createClass({
 'use strict';
 
 /**
+ *  InputLabel
+ *
+ *      params:
+ *
+ *      code:
+ *          <InputLabel name="InputLabel" />
+ *
+ */
+
+var ui = ui || {};
+ui.InputLabel = React.createClass({
+    displayName: "InputLabel",
+
+    getInitialState: function getInitialState() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "span",
+            null,
+            React.createElement(
+                "label",
+                { "for": "" },
+                this.props.require,
+                this.props.label
+            ),
+            React.createElement("input", { type: "text", className: "form-control", name: this.props.name, ref: "labelinput", maxLength: this.props.maxlength, placeholder: this.props.name, required: true })
+        );
+    }
+
+});
+'use strict';
+
+/**
  *  InputDate
  *
  *      params:
@@ -1015,6 +1076,67 @@ var InputText = React.createClass({
                 this.props.label
             ),
             React.createElement('input', { type: 'text', className: 'form-control', 'aria-describedby': 'sizing-addon1', name: this.props.name, id: this.props.id, onKeyUp: this.handleKey, maxLength: this.props.maxLength, placeholder: this.props.placeholder })
+        );
+    }
+
+});
+'use strict';
+
+/**
+ *  MailList
+ *
+ *      params:
+ *
+ *      code:
+ *          <MailList name="MailList" />
+ *
+ */
+
+var ui = ui || {};
+ui.MailList = React.createClass({
+    displayName: "MailList",
+
+    getInitialState: function getInitialState() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "span",
+            null,
+            React.createElement(
+                "label",
+                { "for": "" },
+                this.props.require,
+                this.props.label
+            ),
+            React.createElement("input", { type: "text", className: "form-control", name: this.props.name, ref: "labelinput", maxLength: this.props.maxlength, placeholder: this.props.name, required: true })
         );
     }
 
@@ -1930,4 +2052,327 @@ ui.Textarea = React.createClass({
         );
     }
 
+});
+'use strict';
+
+/**
+ *  WmsCustomer
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsCustomer />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsCustomer = React.createClass({
+    displayName: 'WmsCustomer',
+
+    getInitialState: function getInitialState() {
+        return {
+            'name': this.props.name,
+            'dropClass': '',
+            'list': ['default1', 'default2']
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {},
+
+    handleClick: function handleClick(event) {},
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement('span', null);
+    }
+
+});
+'use strict';
+
+/**
+ *  WmsEmaillist
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsEmaillist />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsEmaillist = React.createClass({
+    displayName: "WmsEmaillist",
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            heads: [],
+            rows: []
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {},
+
+    handleLink: function handleLink(i) {
+        if (this.props.listenLink) {
+            this.props.listenLink(i);
+        }
+    },
+
+    handleRow: function handleRow(row) {
+        if (this.props.handleRow) {
+            row = this.props.handleRow(row);
+        }
+        return row;
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "span",
+            null,
+            React.createElement(
+                "table",
+                { className: "table table-condensed" },
+                React.createElement(
+                    "thead",
+                    null,
+                    React.createElement(
+                        "tr",
+                        null,
+                        this.props.heads.map(this.renderHead)
+                    )
+                ),
+                React.createElement(
+                    "tbody",
+                    null,
+                    this.props.rows.map(this.renderRow)
+                )
+            )
+        );
+    },
+
+    renderRow: function renderRow(row, i) {
+        row = this.handleRow(row);
+        var data = this._sortRowByHeadToArray(row, this.props.heads);
+        var active = "";
+        var boundLink = this.handleLink.bind(this, i);
+
+        if (row.is_read == "0") {
+            active = "active";
+        }
+        return React.createElement(
+            "tr",
+            { "data-index": i, className: active, onClick: boundLink },
+            data.map(this.renderCell)
+        );
+    },
+
+    renderCell: function renderCell(data, i) {
+        return React.createElement(
+            "td",
+            null,
+            React.createElement(
+                "b",
+                null,
+                data
+            )
+        );
+    },
+
+    renderHead: function renderHead(title, i) {
+        title = title.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+            return letter.toUpperCase();
+        });
+        return React.createElement(
+            "th",
+            null,
+            title
+        );
+    },
+
+    _sortRowByHeadToArray: function _sortRowByHeadToArray(row, heads) {
+        var data = [];
+        var index = 0;
+        for (var idx in heads) {
+            var _name = heads[idx];
+            data[index++] = [row[_name]];
+        }
+        return data;
+    }
+});
+'use strict';
+
+/**
+ *  WmsEmaillist
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsEmaillist />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsEmailparent = React.createClass({
+    displayName: "WmsEmailparent",
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            heads: [],
+            rows: [],
+            show: ""
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {},
+
+    handleLink: function handleLink(i) {
+        if (this.props.listenLink) {
+            this.props.listenLink(i);
+        }
+    },
+
+    handleRow: function handleRow(row) {
+        if (this.props.handleRow) {
+            row = this.props.handleRow(row);
+        }
+        return row;
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "span",
+            null,
+            React.createElement(
+                "div",
+                null,
+                this.props.rows[0].subject
+            ),
+            React.createElement(
+                "table",
+                { className: "table table-condensed" },
+                React.createElement(
+                    "tbody",
+                    null,
+                    this.props.rows.map(this.renderRow)
+                )
+            )
+        );
+    },
+
+    renderRow: function renderRow(row, i) {
+        row = this.handleRow(row);
+        var root = this._sortRowByHeadToArray(row, this.props.roots);
+        var subRoots = this._sortRowByHeadToArray(row, this.props.subRoots);
+        var biundLink = this.handleLink.bind(this, i);
+        console.log(this.props);
+        return [React.createElement(
+            "tr",
+            { "data-index": i, className: "active", onClick: biundLink },
+            root.map(this.renderCell)
+        ), React.createElement(
+            "tr",
+            { className: row.show },
+            this.renderSubRoots(subRoots)
+        ), React.createElement(
+            "tr",
+            { className: row.show },
+            this.renderContent(row)
+        )];
+    },
+
+    renderCell: function renderCell(data, i) {
+        return React.createElement(
+            "td",
+            null,
+            React.createElement(
+                "b",
+                null,
+                data
+            )
+        );
+    },
+
+    renderSubRoots: function renderSubRoots(subRoots, i) {
+        return React.createElement(
+            "td",
+            { colSpan: "3" },
+            React.createElement(
+                "b",
+                null,
+                subRoots[0]
+            ),
+            " Send to ",
+            React.createElement(
+                "b",
+                null,
+                "<",
+                subRoots[1],
+                ">"
+            )
+        );
+    },
+
+    renderContent: function renderContent(row, i) {
+        return React.createElement(
+            "td",
+            { colSpan: "3" },
+            row["body_snippet"]
+        );
+    },
+
+    _sortRowByHeadToArray: function _sortRowByHeadToArray(row, heads) {
+        var data = [];
+        var index = 0;
+        for (var idx in heads) {
+            var _name = heads[idx];
+            data[index++] = [row[_name]];
+        }
+        return data;
+    }
 });
