@@ -33,25 +33,15 @@ ui.WmsEmaileditor = React.createClass({
     // --------------------------------------------------------------------------------
     
 
+    getElementHtml() {
+        return this.refs.emailEditor.innerHTML;
+    },
+
     // --------------------------------------------------------------------------------
     // event
     // --------------------------------------------------------------------------------
-    handleChange: function(event) {
-        
-    },
     
-    handleLink: function(i) {
-        if (this.props.listenLink) {
-            this.props.listenLink(i);
-        }
-    },
     
-    handleRow: function(row) {
-        if (this.props.handleRow) {
-            row = this.props.handleRow(row);
-        }
-        return row;
-    },
 
     // --------------------------------------------------------------------------------
     // render
@@ -60,7 +50,7 @@ ui.WmsEmaileditor = React.createClass({
     render() {
         return (
             <span>
-                <div id="editor" placeholder={this.props.placeholder}></div>
+                <div id="editor" placeholder={this.props.placeholder} ref="emailEditor" ></div>
             </span>
         );
     },

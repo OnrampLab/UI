@@ -1143,67 +1143,6 @@ var InputText = React.createClass({
 });
 'use strict';
 
-/**
- *  MailList
- *
- *      params:
- *
- *      code:
- *          <MailList name="MailList" />
- *
- */
-
-var ui = ui || {};
-ui.MailList = React.createClass({
-    displayName: "MailList",
-
-    getInitialState: function getInitialState() {
-        return {};
-    },
-
-    // --------------------------------------------------------------------------------
-    // helper
-    // --------------------------------------------------------------------------------
-    getElementWidth: function getElementWidth() {
-        var dom = this.refs.labelinput;
-        return dom.offsetWidth;
-    },
-
-    setElementValue: function setElementValue(value) {
-        var dom = this.refs.labelinput;
-        dom.value = value;
-    },
-
-    getElementValue: function getElementValue() {
-        var dom = this.refs.labelinput;
-        return dom.value;
-    },
-
-    // --------------------------------------------------------------------------------
-    // event
-    // --------------------------------------------------------------------------------
-
-    // --------------------------------------------------------------------------------
-    // render
-    // Read only: readOnly=true
-    // --------------------------------------------------------------------------------
-    render: function render() {
-        return React.createElement(
-            "span",
-            null,
-            React.createElement(
-                "label",
-                { "for": "" },
-                this.props.require,
-                this.props.label
-            ),
-            React.createElement("input", { type: "text", className: "form-control", name: this.props.name, ref: "labelinput", maxLength: this.props.maxlength, placeholder: this.props.name, required: true })
-        );
-    }
-
-});
-'use strict';
-
 var ui = ui || {};
 ui.Pagination = React.createClass({
     displayName: 'Pagination',
@@ -2207,23 +2146,13 @@ ui.WmsEmaileditor = React.createClass({
     // helper
     // --------------------------------------------------------------------------------
 
+    getElementHtml: function getElementHtml() {
+        return this.refs.emailEditor.innerHTML;
+    },
+
     // --------------------------------------------------------------------------------
     // event
     // --------------------------------------------------------------------------------
-    handleChange: function handleChange(event) {},
-
-    handleLink: function handleLink(i) {
-        if (this.props.listenLink) {
-            this.props.listenLink(i);
-        }
-    },
-
-    handleRow: function handleRow(row) {
-        if (this.props.handleRow) {
-            row = this.props.handleRow(row);
-        }
-        return row;
-    },
 
     // --------------------------------------------------------------------------------
     // render
@@ -2233,7 +2162,7 @@ ui.WmsEmaileditor = React.createClass({
         return React.createElement(
             'span',
             null,
-            React.createElement('div', { id: 'editor', placeholder: this.props.placeholder })
+            React.createElement('div', { id: 'editor', placeholder: this.props.placeholder, ref: 'emailEditor' })
         );
     }
 });
