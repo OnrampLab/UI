@@ -42,6 +42,10 @@
         // --------------------------------------------------------------------------------
         // event
         // --------------------------------------------------------------------------------
+        send(row) {
+            
+        },
+        
         rowChange(row) {
             if ( row.stocked === true ) {
                 row.stocked = 'TRUE';
@@ -52,7 +56,6 @@
         handleLink(i)
         {
             //redirect
-            console.log("show" + i);
             let table = this.state.table;
             if ("" == table.rows[i].show) {
                 table.rows[i].show = "hide";
@@ -64,9 +67,21 @@
 
         // --------------------------------------------------------------------------------
         getInitialState() {
+            let table = this.getRows();
+            
             return {
-                table: this.getRows(),
+                table: table,
+                emailTo: _.last(table.rows).from_email,
+                emailCC: "",
+                emailSubject: "Re: " + table.rows[0].subject,
+                emailBody: "",
             };
+        },
+        
+        componentDidMount: function()
+        {
+            this.refs.emailTo.setElementValue(this.state.emailTo);
+            this.refs.emailSubject.setElementValue(this.state.emailSubject);
         },
 
         render() {
@@ -78,6 +93,13 @@
                         handleRow={this.rowChange}
                         listenLink={this.handleLink}
                     />
+                    <ui.InputInlinelabel name="emailTo" label="Email To:" ref="emailTo" require="" maxlength="100" readonly="readOnly" />
+                    <ui.InputInlinelabel name="emailCC" label="Email CC:" ref="emailCC" require="" maxlength="100" />
+                    <ui.InputInlinelabel name="emailSubject" label="Email Subject:" ref="emailSubject" require="" maxlength="100" readonly="readOnly" />
+                    <ui.WmsEmaileditor />
+                    <button className="btn btn-primary" onClick={this.send}>
+                        Send
+                    </button>
                 </div>
             );
         },

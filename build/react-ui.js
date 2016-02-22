@@ -972,6 +972,67 @@ ui.InputDateComboBox = React.createClass({
 'use strict';
 
 /**
+ *  InputInlinelabel
+ *
+ *      params:
+ *
+ *      code:
+ *          <InputLabel name="InputInlinelabel" />
+ *
+ */
+
+var ui = ui || {};
+ui.InputInlinelabel = React.createClass({
+    displayName: "InputInlinelabel",
+
+    getInitialState: function getInitialState() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "input-group" },
+            React.createElement(
+                "span",
+                { className: "input-group-addon", id: "basic-addon1" },
+                this.props.require,
+                this.props.label
+            ),
+            React.createElement("input", { type: "text", className: "form-control", "aria-describedby": "basic-addon1", name: this.props.name, ref: "labelinput", maxLength: this.props.maxlength, placeholder: this.props.name, readOnly: this.props.readonly })
+        );
+    }
+
+});
+'use strict';
+
+/**
  *  InputLabel
  *
  *      params:
@@ -2125,14 +2186,21 @@ ui.WmsCustomer = React.createClass({
 
 var ui = ui || {};
 ui.WmsEmaileditor = React.createClass({
-    displayName: "WmsEmaileditor",
+    displayName: 'WmsEmaileditor',
 
     getDefaultProps: function getDefaultProps() {
         return {
-            heads: [],
-            rows: [],
-            show: ""
+            placeholder: 'Enter your message here...',
+            body: ""
         };
+    },
+
+    componentDidMount: function componentDidMount() {
+        $('#editor').trumbowyg({
+            fullscreenable: false
+        });
+
+        $('#editor').trumbowyg('html', this.props.body);
     },
 
     // --------------------------------------------------------------------------------
@@ -2163,94 +2231,10 @@ ui.WmsEmaileditor = React.createClass({
     // --------------------------------------------------------------------------------
     render: function render() {
         return React.createElement(
-            "span",
+            'span',
             null,
-            React.createElement(
-                "div",
-                null,
-                this.props.rows[0].subject
-            ),
-            React.createElement(
-                "table",
-                { className: "table table-condensed" },
-                React.createElement(
-                    "tbody",
-                    null,
-                    this.props.rows.map(this.renderRow)
-                )
-            )
+            React.createElement('div', { id: 'editor', placeholder: this.props.placeholder })
         );
-    },
-
-    renderRow: function renderRow(row, i) {
-        row = this.handleRow(row);
-        var root = this._sortRowByHeadToArray(row, this.props.roots);
-        var subRoots = this._sortRowByHeadToArray(row, this.props.subRoots);
-        var biundLink = this.handleLink.bind(this, i);
-
-        return [React.createElement(
-            "tr",
-            { "data-index": i, className: "active", onClick: biundLink },
-            root.map(this.renderCell)
-        ), React.createElement(
-            "tr",
-            { className: row.show },
-            this.renderSubRoots(subRoots)
-        ), React.createElement(
-            "tr",
-            { className: row.show },
-            this.renderContent(row)
-        )];
-    },
-
-    renderCell: function renderCell(data, i) {
-        return React.createElement(
-            "td",
-            null,
-            React.createElement(
-                "b",
-                null,
-                data
-            )
-        );
-    },
-
-    renderSubRoots: function renderSubRoots(subRoots, i) {
-        return React.createElement(
-            "td",
-            { colSpan: "3" },
-            React.createElement(
-                "b",
-                null,
-                subRoots[0]
-            ),
-            " Send to ",
-            React.createElement(
-                "b",
-                null,
-                "<",
-                subRoots[1],
-                ">"
-            )
-        );
-    },
-
-    renderContent: function renderContent(row, i) {
-        return React.createElement(
-            "td",
-            { colSpan: "3" },
-            row["body_snippet"]
-        );
-    },
-
-    _sortRowByHeadToArray: function _sortRowByHeadToArray(row, heads) {
-        var data = [];
-        var index = 0;
-        for (var idx in heads) {
-            var _name = heads[idx];
-            data[index++] = [row[_name]];
-        }
-        return data;
     }
 });
 'use strict';
@@ -2395,8 +2379,7 @@ ui.WmsEmailparent = React.createClass({
     getDefaultProps: function getDefaultProps() {
         return {
             heads: [],
-            rows: [],
-            show: ""
+            rows: []
         };
     },
 

@@ -17,7 +17,6 @@ ui.WmsEmailparent = React.createClass({
         return {
             heads: [],
             rows: [],
-            show: "",
         };
     },
 

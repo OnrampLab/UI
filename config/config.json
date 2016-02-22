@@ -1,22 +1,23 @@
 {
     "menu": [
-        ["Home",    "Description",  "src/Home"          ],
-        ["Home",    "Utils",        "src/HomeUtils"     ],
-        ["Button",  "ButtonGroup",  "src/ButtonGroup"   ],
-        ["Button",  "Breadcrumb",   "src/Breadcrumb"    ],
-        ["Table",   "TableShow",    "src/TableShow"     ],
-        ["Table",   "TableChoose",  "src/TableChoose"   ],
-        ["Table",   "WmsEmaillist", "src/WmsEmaillist"  ],
-        ["Table",   "WmsEmailparent", "src/WmsEmailparent"],
-        ["Table",   "WmsEmaileditor", "src/WmsEmaileditor"],
-        ["Form",    "InputDate",    "src/InputDate"     ],
-        ["Form",    "InputLabel",   "src/InputLabel"    ],
-        ["Form",    "Autocomplete", "src/Autocomplete"  ],
-        ["Form",    "AutocompleteMuti", "src/AutocompleteMuti"  ],
-        ["Form",    "Textarea",     "src/Textarea"      ],
-        ["Message", "Info",         "src/Info"          ],
-        ["Other",   "Pagination",   "src/Pagination"    ],
-        ["Other",   "Selection",    "src/Selection"     ],
-        ["Combo",   "WmsCustomer",  "src/WmsCustomer"   ] 
+        ["Home",    "Description",      "src/Home"             ],
+        ["Home",    "Utils",            "src/HomeUtils"        ],
+        ["Button",  "ButtonGroup",      "src/ButtonGroup"      ],
+        ["Button",  "Breadcrumb",       "src/Breadcrumb"       ],
+        ["Table",   "TableShow",        "src/TableShow"        ],
+        ["Table",   "TableChoose",      "src/TableChoose"      ],
+        ["Table",   "WmsEmaillist",     "src/WmsEmaillist"     ],
+        ["Table",   "WmsEmailparent",   "src/WmsEmailparent"   ],
+        ["Table",   "WmsEmaileditor",   "src/WmsEmaileditor"   ],
+        ["Form",    "InputDate",        "src/InputDate"        ],
+        ["Form",    "InputLabel",       "src/InputLabel"       ],
+        ["Form",    "InputInlinelabel", "src/InputInlinelabel" ],
+        ["Form",    "Autocomplete",     "src/Autocomplete"     ],
+        ["Form",    "AutocompleteMuti", "src/AutocompleteMuti" ],
+        ["Form",    "Textarea",         "src/Textarea"         ],
+        ["Message", "Info",             "src/Info"             ],
+        ["Other",   "Pagination",       "src/Pagination"       ],
+        ["Other",   "Selection",        "src/Selection"        ],
+        ["Combo",   "WmsCustomer",      "src/WmsCustomer"      ] 
     ]
 }
