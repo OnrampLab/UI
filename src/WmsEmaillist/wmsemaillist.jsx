@@ -39,6 +39,7 @@ ui.WmsEmaillist = React.createClass({
     },
     
     handleRow: function(row) {
+        // custom event
         if (this.props.handleRow) {
             row = this.props.handleRow(row);
         }
@@ -52,7 +53,7 @@ ui.WmsEmaillist = React.createClass({
     render() {
         return (
             <span>
-                <table className="table table-condensed">
+                <table className="table table-condensed table-bordered">
                     <thead>
                         <tr>
                             {this.props.heads.map(this.renderHead)}

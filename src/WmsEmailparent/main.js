@@ -42,8 +42,13 @@
         // --------------------------------------------------------------------------------
         // event
         // --------------------------------------------------------------------------------
-        send(row) {
-            
+        send() {
+            let data = {emailTo: this.refs.emailTo.getElementValue(),
+                        emailCC: this.refs.emailCC.getElementValue(),
+                        emailSubject: this.refs.emailSubject.getElementValue(),
+                        emailBody: this.refs.emailEditor.getElementHtml(),
+                       }
+            //call send mail function
         },
         
         rowChange(row) {
@@ -96,7 +101,7 @@
                     <ui.InputInlinelabel name="emailTo" label="Email To:" ref="emailTo" require="" maxlength="100" readonly="readOnly" />
                     <ui.InputInlinelabel name="emailCC" label="Email CC:" ref="emailCC" require="" maxlength="100" />
                     <ui.InputInlinelabel name="emailSubject" label="Email Subject:" ref="emailSubject" require="" maxlength="100" readonly="readOnly" />
-                    <ui.WmsEmaileditor />
+                    <ui.WmsEmaileditor ref="emailEditor" />
                     <button className="btn btn-primary" onClick={this.send}>
                         Send
                     </button>
