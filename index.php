@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="build/assets/font-awesome/css/font-awesome.css" />
 
     <script src="build/react-bundle.js"></script>
-    <script src="dist/utils.js"></script>
+    <script src="build/react-ui.js"></script>
   </head>
   <body>
 
@@ -65,7 +65,7 @@
             </div>
             <div class="col-md-10">
                 <?php showContent($mainPage, $subPage); ?>
-                <?php showCompileJs($mainPage, $subPage); ?>
+                <?php showMainJs($mainPage, $subPage); ?>
             </div>
         </div>
     </section>
@@ -85,12 +85,12 @@
         }
     }
 
-    function showCompileJs( $mainPage, $subPage )
+    function showMainJs( $mainPage, $subPage )
     {
-        $pathfile = getMenuPath($mainPage, $subPage) . '/compile.tmp.js';
+        $pathfile = getMenuPath($mainPage, $subPage) . '/main.js';
         if ( !file_exists($pathfile) ) {
             return;
         }
-        echo '<'. 'script src="'. $pathfile .'"></script>';
+        echo '<'. 'script type="text/babel" src="'. $pathfile .'"></script>';
     }
 
