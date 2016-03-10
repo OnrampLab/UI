@@ -16,6 +16,8 @@
     "react-jsx-anywhere": "^0.*",
     "jquery": "^2.1.*",
     "bootstrap": "^3.*",
-    "font-awesome": "^4.*"
+    "font-awesome": "^4.*",
+    "lodash": "^4.*",
+    "trumbowyg": "^2.*"
   }
 }
