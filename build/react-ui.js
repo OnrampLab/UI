@@ -621,6 +621,99 @@ ui.ButtonGroup = React.createClass({
 });
 'use strict';
 
+/**
+ *  HtmlEditor
+ *
+ *      params:
+ *
+ *      code:
+ *          <HtmlEditor />
+ *
+ */
+var ui = ui || {};
+ui.HtmlEditor = React.createClass({
+  displayName: 'HtmlEditor',
+
+  view: function view() {
+    $('iframe')[0].contentDocument.documentElement.innerHTML = $('textarea').val();
+  },
+  // --------------------------------------------------------------------------------
+  // render
+  // --------------------------------------------------------------------------------
+  render: function render() {
+    var textareaStyle = {};
+    textareaStyle['width'] = '45%';
+    textareaStyle['height'] = '300px';
+    textareaStyle['margin'] = '2%';
+    textareaStyle['font-family'] = 'courier';
+    var viewStyle = {};
+    viewStyle['width'] = '45%';
+    viewStyle['height'] = '300px';
+    viewStyle['margin'] = '2%';
+    viewStyle['border'] = 'none';
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'div',
+        null,
+        React.createElement('input', { type: 'button', onClick: this.view, value: 'View' })
+      ),
+      React.createElement(
+        'textarea',
+        { style: textareaStyle },
+        this.props.content
+      ),
+      React.createElement('iframe', { style: viewStyle })
+    );
+  }
+
+});
+'use strict';
+
+var ui = ui || {};
+ui.Img = React.createClass({
+	displayName: 'Img',
+
+	mouseOverHandler: function mouseOverHandler() {
+		$('#button-x-' + this.props.data.title).show();
+	},
+	mouseOutHandler: function mouseOutHandler() {
+		$('#button-x-' + this.props.data.title).hide();
+	},
+	'delete': function _delete() {
+		$('#section-img-' + this.props.data.title).remove();
+	},
+	render: function render() {
+		var imgStyle = {};
+		var xStyle = {};
+		xStyle['background'] = 'black';
+		xStyle['color'] = 'white';
+		xStyle['text-align'] = 'center';
+		xStyle['width'] = '20px';
+		xStyle['height'] = '20px';
+		xStyle['border-radius'] = '10px';
+		xStyle['position'] = 'absolute';
+		xStyle['top'] = '0px';
+		xStyle['opacity'] = '0.3';
+		xStyle['display'] = 'none';
+		var sectionId = 'section-img-' + this.props.data.title;
+		var imgId = 'img-' + this.props.data.title;
+		var xId = 'button-x-' + this.props.data.title;
+		return React.createElement(
+			'section',
+			{ id: sectionId },
+			React.createElement('img', { id: imgId, src: this.props.data.src, title: this.props.data.description, style: imgStyle, onMouseOver: this.mouseOverHandler, onMouseOut: this.mouseOutHandler }),
+			React.createElement(
+				'div',
+				{ id: xId, style: xStyle, onClick: this['delete'], onMouseOver: this.mouseOverHandler },
+				'x'
+			)
+		);
+	}
+});
+'use strict';
+
 var ui = ui || {};
 ui.Info = React.createClass({
     displayName: "Info",

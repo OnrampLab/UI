@@ -13,6 +13,8 @@
         ["Form",    "AutocompleteMuti", "src/AutocompleteMuti" ],
         ["Form",    "Textarea",         "src/Textarea"         ],
         ["Form",    "Uploader",         "src/Uploader"         ],
+        ["Text",    "HtmlEditor",       "src/HtmlEditor"       ],
+        ["Image",   "Img",			    "src/Img"		       ],
         ["Message", "Info",             "src/Info"             ],
         ["Other",   "Pagination",       "src/Pagination"       ],
         ["Other",   "Selection",        "src/Selection"        ],
