@@ -109,6 +109,220 @@
 })('utils');
 'use strict';
 
+/**
+ *  Autocomplete
+ *
+ *      params:
+ *
+ *      code:
+ *          <Autocomplete name="customerName" />
+ *
+ */
+
+var ui = ui || {};
+ui.Autocomplete = React.createClass({
+    displayName: 'Autocomplete',
+
+    getInitialState: function getInitialState() {
+        return {
+            'name': this.props.name,
+            'dropClass': '',
+            'list': ['default1', 'default2']
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {
+
+        // �ѥ~���ϥΪ� listenClick �O�_���إ�
+        if (this.props.listenChange) {
+            this.props.listenChange(event, this);
+        }
+    },
+
+    handleClick: function handleClick(event) {
+        if (this.props.listenClick) {
+            this.props.listenClick(event, this);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        var list = this.state.list;
+        var dropClass = "dropdown " + this.state.dropClass;
+        var boundChange = this.handleChange.bind(this);
+        var boundClick = this.handleClick.bind(this);
+        return React.createElement(
+            'span',
+            null,
+            React.createElement(
+                'label',
+                { 'for': '' },
+                this.props.require,
+                this.props.label
+            ),
+            React.createElement('input', { type: 'text', className: 'form-control', name: this.props.name, ref: 'labelinput', maxLength: this.props.maxlength, placeholder: this.props.name, required: true, onChange: boundChange }),
+            React.createElement(
+                'div',
+                { className: dropClass },
+                React.createElement(
+                    'button',
+                    { className: 'btn btn-default dropdown-toggle hide', type: 'button', id: 'dropdownMenu1', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'true' },
+                    'Dropdown',
+                    React.createElement('span', { 'class': 'caret' })
+                ),
+                React.createElement(
+                    'ul',
+                    { className: 'dropdown-menu' },
+                    list.map(function (listValue) {
+                        return React.createElement(
+                            'li',
+                            { onClick: boundClick },
+                            React.createElement(
+                                'a',
+                                { href: '#' },
+                                listValue
+                            )
+                        );
+                    })
+                )
+            )
+        );
+    }
+
+});
+'use strict';
+
+/**
+ *  AutocompleteMuti
+ *
+ *      params:
+ *
+ *      code:
+ *          <AutocompleteMuti name="customerName" />
+ *
+ */
+
+var ui = ui || {};
+ui.AutocompleteMuti = React.createClass({
+    displayName: 'AutocompleteMuti',
+
+    getInitialState: function getInitialState() {
+        return {
+            'name': this.props.name,
+            'dropClass': '',
+            'list': ['default1', 'default2']
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {
+
+        // �ѥ~���ϥΪ� listenClick �O�_���إ�
+        if (this.props.listenChange) {
+            this.props.listenChange(event, this);
+        }
+    },
+
+    handleClick: function handleClick(event) {
+        if (this.props.listenClick) {
+            this.props.listenClick(event, this);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        var list = this.state.list;
+        var dropClass = "dropdown " + this.state.dropClass;
+        var boundChange = this.handleChange.bind(this);
+        var boundClick = this.handleClick.bind(this);
+        return React.createElement(
+            'span',
+            null,
+            React.createElement(
+                'label',
+                { 'for': '' },
+                this.props.require,
+                this.props.label
+            ),
+            React.createElement('input', { type: 'text', className: 'form-control', name: this.props.name, ref: 'labelinput', maxLength: this.props.maxlength, placeholder: this.props.name, required: true, onChange: boundChange }),
+            React.createElement(
+                'div',
+                { className: dropClass },
+                React.createElement(
+                    'button',
+                    { className: 'btn btn-default dropdown-toggle hide', type: 'button', id: 'dropdownMenu1', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'true' },
+                    'Dropdown',
+                    React.createElement('span', { 'class': 'caret' })
+                ),
+                React.createElement(
+                    'ul',
+                    { className: 'dropdown-menu' },
+                    list.map(function (listValue, i) {
+                        return React.createElement(
+                            'li',
+                            { onClick: boundClick, 'data-index': i },
+                            React.createElement(
+                                'a',
+                                { href: '#' },
+                                listValue
+                            )
+                        );
+                    })
+                )
+            )
+        );
+    }
+
+});
+'use strict';
+
 var ui = ui || {};
 ui.Breadcrumb = React.createClass({
     displayName: 'Breadcrumb',
@@ -404,6 +618,99 @@ ui.ButtonGroup = React.createClass({
         );
     }
 
+});
+'use strict';
+
+/**
+ *  HtmlEditor
+ *
+ *      params:
+ *
+ *      code:
+ *          <HtmlEditor />
+ *
+ */
+var ui = ui || {};
+ui.HtmlEditor = React.createClass({
+  displayName: 'HtmlEditor',
+
+  view: function view() {
+    $('iframe')[0].contentDocument.documentElement.innerHTML = $('textarea').val();
+  },
+  // --------------------------------------------------------------------------------
+  // render
+  // --------------------------------------------------------------------------------
+  render: function render() {
+    var textareaStyle = {};
+    textareaStyle['width'] = '45%';
+    textareaStyle['height'] = '300px';
+    textareaStyle['margin'] = '2%';
+    textareaStyle['font-family'] = 'courier';
+    var viewStyle = {};
+    viewStyle['width'] = '45%';
+    viewStyle['height'] = '300px';
+    viewStyle['margin'] = '2%';
+    viewStyle['border'] = 'none';
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'div',
+        null,
+        React.createElement('input', { type: 'button', onClick: this.view, value: 'View' })
+      ),
+      React.createElement(
+        'textarea',
+        { style: textareaStyle },
+        this.props.content
+      ),
+      React.createElement('iframe', { style: viewStyle })
+    );
+  }
+
+});
+'use strict';
+
+var ui = ui || {};
+ui.Img = React.createClass({
+	displayName: 'Img',
+
+	mouseOverHandler: function mouseOverHandler() {
+		$('#button-x-' + this.props.data.title).show();
+	},
+	mouseOutHandler: function mouseOutHandler() {
+		$('#button-x-' + this.props.data.title).hide();
+	},
+	'delete': function _delete() {
+		$('#section-img-' + this.props.data.title).remove();
+	},
+	render: function render() {
+		var imgStyle = {};
+		var xStyle = {};
+		xStyle['background'] = 'black';
+		xStyle['color'] = 'white';
+		xStyle['text-align'] = 'center';
+		xStyle['width'] = '20px';
+		xStyle['height'] = '20px';
+		xStyle['border-radius'] = '10px';
+		xStyle['position'] = 'absolute';
+		xStyle['top'] = '0px';
+		xStyle['opacity'] = '0.3';
+		xStyle['display'] = 'none';
+		var sectionId = 'section-img-' + this.props.data.title;
+		var imgId = 'img-' + this.props.data.title;
+		var xId = 'button-x-' + this.props.data.title;
+		return React.createElement(
+			'section',
+			{ id: sectionId },
+			React.createElement('img', { id: imgId, src: this.props.data.src, title: this.props.data.description, style: imgStyle, onMouseOver: this.mouseOverHandler, onMouseOut: this.mouseOutHandler }),
+			React.createElement(
+				'div',
+				{ id: xId, style: xStyle, onClick: this['delete'], onMouseOver: this.mouseOverHandler },
+				'x'
+			)
+		);
+	}
 });
 'use strict';
 
@@ -751,6 +1058,128 @@ ui.InputDateComboBox = React.createClass({
             'option',
             { key: index, value: value },
             show
+        );
+    }
+
+});
+'use strict';
+
+/**
+ *  InputInlinelabel
+ *
+ *      params:
+ *
+ *      code:
+ *          <InputLabel name="InputInlinelabel" />
+ *
+ */
+
+var ui = ui || {};
+ui.InputInlinelabel = React.createClass({
+    displayName: "InputInlinelabel",
+
+    getInitialState: function getInitialState() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "input-group" },
+            React.createElement(
+                "span",
+                { className: "input-group-addon", id: "basic-addon1" },
+                this.props.require,
+                this.props.label
+            ),
+            React.createElement("input", { type: "text", className: "form-control", "aria-describedby": "basic-addon1", name: this.props.name, ref: "labelinput", maxLength: this.props.maxlength, placeholder: this.props.name, readOnly: this.props.readonly })
+        );
+    }
+
+});
+'use strict';
+
+/**
+ *  InputLabel
+ *
+ *      params:
+ *
+ *      code:
+ *          <InputLabel name="InputLabel" />
+ *
+ */
+
+var ui = ui || {};
+ui.InputLabel = React.createClass({
+    displayName: "InputLabel",
+
+    getInitialState: function getInitialState() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "span",
+            null,
+            React.createElement(
+                "label",
+                { "for": "" },
+                this.props.require,
+                this.props.label
+            ),
+            React.createElement("input", { type: "text", className: "form-control", name: this.props.name, ref: "labelinput", maxLength: this.props.maxlength, placeholder: this.props.name, required: true })
         );
     }
 
@@ -1656,4 +2085,537 @@ ui.TableShow = React.createClass({
         return data;
     }
 
+});
+'use strict';
+
+/**
+ *  InputDate
+ *
+ *      params:
+ *
+ *      code:
+ *          <InputLbel name="customerName" />
+ *
+ */
+var ui = ui || {};
+ui.Textarea = React.createClass({
+    displayName: 'Textarea',
+
+    getInitialState: function getInitialState() {
+        return {
+            'name': this.props.name
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.textarea1;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.textarea1;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.textarea1;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // render
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            'span',
+            null,
+            React.createElement(
+                'label',
+                { 'for': '' },
+                this.props.label
+            ),
+            React.createElement('textarea', { className: 'form-control', name: this.props.name, rows: this.props.rows, ref: 'textarea1', maxLength: '1000', placeholder: this.props.name })
+        );
+    }
+
+});
+'use strict';
+
+/**
+ *  UploadControl
+ *
+ *      params:
+ *
+ *      code:
+ *          <UploadControl />
+ *
+ */
+
+var ui = ui || {};
+ui.UploadControl = React.createClass({
+    displayName: "UploadControl",
+
+    getDefaultProps: function getDefaultProps() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    handleFile: function handleFile(e) {
+        if (this.props.listenFile) {
+            this.props.listenFile(e);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+
+        return React.createElement("input", { type: "text", onChange: this.handleFile });
+    }
+});
+'use strict';
+
+/**
+ *  Uploader
+ *
+ *      params:
+ *
+ *      code:
+ *          <Uploader />
+ *
+ */
+
+var ui = ui || {};
+ui.Uploader = React.createClass({
+    displayName: "Uploader",
+
+    getDefaultProps: function getDefaultProps() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    handleFile: function handleFile(e) {
+        if (this.props.listenFile) {
+            this.props.listenFile(e);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+
+        return React.createElement("input", { type: "file", onChange: this.handleFile });
+    }
+});
+'use strict';
+
+/**
+ *  WmsCustomer
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsCustomer />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsCustomer = React.createClass({
+    displayName: 'WmsCustomer',
+
+    getInitialState: function getInitialState() {
+        return {
+            'name': this.props.name,
+            'dropClass': '',
+            'list': ['default1', 'default2']
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {},
+
+    handleClick: function handleClick(event) {},
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement('span', null);
+    }
+
+});
+'use strict';
+
+/**
+ *  WmsEmaileditor
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsEmaileditor />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsEmaileditor = React.createClass({
+    displayName: 'WmsEmaileditor',
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            placeholder: 'Enter your message here...',
+            body: ""
+        };
+    },
+
+    componentDidMount: function componentDidMount() {
+        $('#editor').trumbowyg({
+            fullscreenable: false
+        });
+
+        $('#editor').trumbowyg('html', this.props.body);
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    getElementHtml: function getElementHtml() {
+        return this.refs.emailEditor.innerHTML;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            'span',
+            null,
+            React.createElement('div', { id: 'editor', placeholder: this.props.placeholder, ref: 'emailEditor' })
+        );
+    }
+});
+'use strict';
+
+/**
+ *  WmsEmaillist
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsEmaillist />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsEmaillist = React.createClass({
+    displayName: "WmsEmaillist",
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            heads: [],
+            rows: []
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {},
+
+    handleLink: function handleLink(i) {
+        if (this.props.listenLink) {
+            this.props.listenLink(i);
+        }
+    },
+
+    handleRow: function handleRow(row) {
+        // custom event
+        if (this.props.handleRow) {
+            row = this.props.handleRow(row);
+        }
+        return row;
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "span",
+            null,
+            React.createElement(
+                "table",
+                { className: "table table-condensed table-bordered" },
+                React.createElement(
+                    "thead",
+                    null,
+                    React.createElement(
+                        "tr",
+                        null,
+                        this.props.heads.map(this.renderHead)
+                    )
+                ),
+                React.createElement(
+                    "tbody",
+                    null,
+                    this.props.rows.map(this.renderRow)
+                )
+            )
+        );
+    },
+
+    renderRow: function renderRow(row, i) {
+        row = this.handleRow(row);
+        var data = this._sortRowByHeadToArray(row, this.props.heads);
+        var active = "";
+        var boundLink = this.handleLink.bind(this, i);
+
+        if (row.is_read == "0") {
+            active = "active";
+        }
+        return React.createElement(
+            "tr",
+            { "data-index": i, className: active, onClick: boundLink },
+            data.map(this.renderCell)
+        );
+    },
+
+    renderCell: function renderCell(data, i) {
+        return React.createElement(
+            "td",
+            null,
+            React.createElement(
+                "b",
+                null,
+                data
+            )
+        );
+    },
+
+    renderHead: function renderHead(title, i) {
+        title = title.toLowerCase().replace(/\b[a-z]/g, function (letter) {
+            return letter.toUpperCase();
+        });
+        return React.createElement(
+            "th",
+            null,
+            title
+        );
+    },
+
+    _sortRowByHeadToArray: function _sortRowByHeadToArray(row, heads) {
+        var data = [];
+        var index = 0;
+        for (var idx in heads) {
+            var _name = heads[idx];
+            data[index++] = [row[_name]];
+        }
+        return data;
+    }
+});
+'use strict';
+
+/**
+ *  WmsEmaillist
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsEmaillist />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsEmailparent = React.createClass({
+    displayName: "WmsEmailparent",
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            heads: [],
+            rows: []
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getTitle: function getTitle() {
+        if (this.state != null) {
+            return this.states.rows[0].subject;
+        } else if (typeof this.props.rows[0] != "undefined") {
+            return this.props.rows[0].subject;
+        } else {
+            return "";
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {},
+
+    handleLink: function handleLink(i) {
+        if (this.props.listenLink) {
+            this.props.listenLink(i);
+        }
+    },
+
+    handleRow: function handleRow(row) {
+        if (this.props.handleRow) {
+            row = this.props.handleRow(row);
+        }
+        return row;
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            "span",
+            null,
+            React.createElement(
+                "div",
+                null,
+                this.getTitle()
+            ),
+            React.createElement(
+                "table",
+                { className: "table table-condensed" },
+                React.createElement(
+                    "tbody",
+                    null,
+                    this.props.rows.map(this.renderRow)
+                )
+            )
+        );
+    },
+
+    renderRow: function renderRow(row, i) {
+        row = this.handleRow(row);
+        var root = this._sortRowByHeadToArray(row, this.props.roots);
+        var subRoots = this._sortRowByHeadToArray(row, this.props.subRoots);
+        var biundLink = this.handleLink.bind(this, i);
+
+        return [React.createElement(
+            "tr",
+            { "data-index": i, className: "active", onClick: biundLink },
+            root.map(this.renderCell)
+        ), React.createElement(
+            "tr",
+            { className: row.show },
+            this.renderSubRoots(subRoots)
+        ), React.createElement(
+            "tr",
+            { className: row.show },
+            this.renderContent(row)
+        )];
+    },
+
+    renderCell: function renderCell(data, i) {
+        return React.createElement(
+            "td",
+            null,
+            React.createElement(
+                "b",
+                null,
+                data
+            )
+        );
+    },
+
+    renderSubRoots: function renderSubRoots(subRoots, i) {
+        return React.createElement(
+            "td",
+            { colSpan: "3" },
+            React.createElement(
+                "b",
+                null,
+                subRoots[0]
+            ),
+            " Send to ",
+            React.createElement(
+                "b",
+                null,
+                "<",
+                subRoots[1],
+                ">"
+            )
+        );
+    },
+
+    renderContent: function renderContent(row, i) {
+        return React.createElement(
+            "td",
+            { colSpan: "3" },
+            row["body_snippet"]
+        );
+    },
+
+    _sortRowByHeadToArray: function _sortRowByHeadToArray(row, heads) {
+        var data = [];
+        var index = 0;
+        for (var idx in heads) {
+            var _name = heads[idx];
+            data[index++] = [row[_name]];
+        }
+        return data;
+    }
 });

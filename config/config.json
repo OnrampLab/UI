@@ -1,16 +1,26 @@
 {
     "menu": [
-        ["Home",    "Description",  "src/Home"          ],
-        ["Home",    "Utils",        "src/HomeUtils"     ],
-        ["Button",  "ButtonGroup",  "src/ButtonGroup"   ],
-        ["Button",  "Breadcrumb",   "src/Breadcrumb"    ],
-        ["Table",   "TableShow",    "src/TableShow"     ],
-        ["Table",   "TableChoose",  "src/TableChoose"   ],
-        ["Form",    "InputDate",    "src/InputDate"     ],
-        ["Text",    "HtmlEditor",   "src/HtmlEditor"    ],
-        ["Image",   "Img",			"src/Img"		    ],
-        ["Message", "Info",         "src/Info"          ],
-        ["Other",   "Pagination",   "src/Pagination"    ],
-        ["Other",   "Selection",    "src/Selection"     ]
+        ["Home",    "Description",      "src/Home"             ],
+        ["Home",    "Utils",            "src/HomeUtils"        ],
+        ["Button",  "ButtonGroup",      "src/ButtonGroup"      ],
+        ["Button",  "Breadcrumb",       "src/Breadcrumb"       ],
+        ["Table",   "TableShow",        "src/TableShow"        ],
+        ["Table",   "TableChoose",      "src/TableChoose"      ],
+        ["Form",    "InputDate",        "src/InputDate"        ],
+        ["Form",    "InputLabel",       "src/InputLabel"       ],
+        ["Form",    "InputInlinelabel", "src/InputInlinelabel" ],
+        ["Form",    "Autocomplete",     "src/Autocomplete"     ],
+        ["Form",    "AutocompleteMuti", "src/AutocompleteMuti" ],
+        ["Form",    "Textarea",         "src/Textarea"         ],
+        ["Form",    "Uploader",         "src/Uploader"         ],
+        ["Text",    "HtmlEditor",       "src/HtmlEditor"       ],
+        ["Image",   "Img",			    "src/Img"		       ],
+        ["Message", "Info",             "src/Info"             ],
+        ["Other",   "Pagination",       "src/Pagination"       ],
+        ["Other",   "Selection",        "src/Selection"        ],
+        ["Combo",   "WmsEmaillist",     "src/WmsEmaillist"     ],
+        ["Combo",   "WmsEmailparent",   "src/WmsEmailparent"   ],
+        ["Combo",   "WmsEmaileditor",   "src/WmsEmaileditor"   ],
+        ["Combo",   "WmsCustomer",      "src/WmsCustomer"      ] 
     ]
 }
