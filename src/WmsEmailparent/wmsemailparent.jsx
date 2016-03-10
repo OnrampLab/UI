@@ -23,7 +23,15 @@ ui.WmsEmailparent = React.createClass({
     // --------------------------------------------------------------------------------
     // helper
     // --------------------------------------------------------------------------------
-    
+    getTitle: function() {
+        if (this.state != null) {
+            return this.states.rows[0].subject;
+        } else if (typeof this.props.rows[0] != "undefined") {
+            return this.props.rows[0].subject;
+        } else {
+            return "";
+        }
+    },
 
     // --------------------------------------------------------------------------------
     // event
@@ -52,7 +60,7 @@ ui.WmsEmailparent = React.createClass({
     render() {
         return (
             <span>
-                <div>{this.props.rows[0].subject}</div>
+                <div>{this.getTitle()}</div>
                 <table className="table table-condensed">
                     <tbody>
                         {this.props.rows.map(this.renderRow)}

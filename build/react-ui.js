@@ -2056,6 +2056,92 @@ ui.Textarea = React.createClass({
 'use strict';
 
 /**
+ *  UploadControl
+ *
+ *      params:
+ *
+ *      code:
+ *          <UploadControl />
+ *
+ */
+
+var ui = ui || {};
+ui.UploadControl = React.createClass({
+    displayName: "UploadControl",
+
+    getDefaultProps: function getDefaultProps() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    handleFile: function handleFile(e) {
+        if (this.props.listenFile) {
+            this.props.listenFile(e);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+
+        return React.createElement("input", { type: "text", onChange: this.handleFile });
+    }
+});
+'use strict';
+
+/**
+ *  Uploader
+ *
+ *      params:
+ *
+ *      code:
+ *          <Uploader />
+ *
+ */
+
+var ui = ui || {};
+ui.Uploader = React.createClass({
+    displayName: "Uploader",
+
+    getDefaultProps: function getDefaultProps() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    handleFile: function handleFile(e) {
+        if (this.props.listenFile) {
+            this.props.listenFile(e);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+
+        return React.createElement("input", { type: "file", onChange: this.handleFile });
+    }
+});
+'use strict';
+
+/**
  *  WmsCustomer
  *
  *      params:
@@ -2205,6 +2291,7 @@ ui.WmsEmaillist = React.createClass({
     },
 
     handleRow: function handleRow(row) {
+        // custom event
         if (this.props.handleRow) {
             row = this.props.handleRow(row);
         }
@@ -2221,7 +2308,7 @@ ui.WmsEmaillist = React.createClass({
             null,
             React.createElement(
                 "table",
-                { className: "table table-condensed" },
+                { className: "table table-condensed table-bordered" },
                 React.createElement(
                     "thead",
                     null,
@@ -2315,6 +2402,15 @@ ui.WmsEmailparent = React.createClass({
     // --------------------------------------------------------------------------------
     // helper
     // --------------------------------------------------------------------------------
+    getTitle: function getTitle() {
+        if (this.state != null) {
+            return this.states.rows[0].subject;
+        } else if (typeof this.props.rows[0] != "undefined") {
+            return this.props.rows[0].subject;
+        } else {
+            return "";
+        }
+    },
 
     // --------------------------------------------------------------------------------
     // event
@@ -2345,7 +2441,7 @@ ui.WmsEmailparent = React.createClass({
             React.createElement(
                 "div",
                 null,
-                this.props.rows[0].subject
+                this.getTitle()
             ),
             React.createElement(
                 "table",

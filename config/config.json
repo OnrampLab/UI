@@ -6,18 +6,19 @@
         ["Button",  "Breadcrumb",       "src/Breadcrumb"       ],
         ["Table",   "TableShow",        "src/TableShow"        ],
         ["Table",   "TableChoose",      "src/TableChoose"      ],
-        ["Table",   "WmsEmaillist",     "src/WmsEmaillist"     ],
-        ["Table",   "WmsEmailparent",   "src/WmsEmailparent"   ],
-        ["Table",   "WmsEmaileditor",   "src/WmsEmaileditor"   ],
         ["Form",    "InputDate",        "src/InputDate"        ],
         ["Form",    "InputLabel",       "src/InputLabel"       ],
         ["Form",    "InputInlinelabel", "src/InputInlinelabel" ],
         ["Form",    "Autocomplete",     "src/Autocomplete"     ],
         ["Form",    "AutocompleteMuti", "src/AutocompleteMuti" ],
         ["Form",    "Textarea",         "src/Textarea"         ],
+        ["Form",    "Uploader",         "src/Uploader"         ],
         ["Message", "Info",             "src/Info"             ],
         ["Other",   "Pagination",       "src/Pagination"       ],
         ["Other",   "Selection",        "src/Selection"        ],
+        ["Combo",   "WmsEmaillist",     "src/WmsEmaillist"     ],
+        ["Combo",   "WmsEmailparent",   "src/WmsEmailparent"   ],
+        ["Combo",   "WmsEmaileditor",   "src/WmsEmaileditor"   ],
         ["Combo",   "WmsCustomer",      "src/WmsCustomer"      ] 
     ]
 }
