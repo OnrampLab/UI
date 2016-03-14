@@ -10,14 +10,12 @@
 <html>
   <head>
     <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
-    <title>Example</title>
-    <script src="build/assets/jquery/jquery.js"></script>
-    <script src="build/assets/bootstrap/js/bootstrap.js"></script>
+    <title>React Component</title>
     <script src="build/assets/lodash/lodash.js"></script>
-    <script src="build/assets/trumbowyg/trumbowyg.min.js"></script>
-    <link rel="stylesheet" href="build/assets/bootstrap/css/bootstrap.min.css" />
+    <script src="build/assets/jquery/jquery.js"></script>
     <link rel="stylesheet" href="build/assets/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="build/assets/trumbowyg/ui/trumbowyg.min.css">
+    <link rel="stylesheet" href="build/assets/bootstrap/css/bootstrap.min.css" />
+    <script src="build/assets/bootstrap/js/bootstrap.js"></script>
 
     <script src="build/react-bundle.js"></script>
     <script src="build/react-ui.js"></script>

@@ -17,10 +17,6 @@
         ["Image",   "Img",			    "src/Img"		       ],
         ["Message", "Info",             "src/Info"             ],
         ["Other",   "Pagination",       "src/Pagination"       ],
-        ["Other",   "Selection",        "src/Selection"        ],
-        ["Combo",   "WmsEmaillist",     "src/WmsEmaillist"     ],
-        ["Combo",   "WmsEmailparent",   "src/WmsEmailparent"   ],
-        ["Combo",   "WmsEmaileditor",   "src/WmsEmaileditor"   ],
-        ["Combo",   "WmsCustomer",      "src/WmsCustomer"      ] 
+        ["Other",   "Selection",        "src/Selection"        ]
     ]
 }

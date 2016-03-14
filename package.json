@@ -10,14 +10,14 @@
     "gulp-notify": "^2.2",
     "gulp-sourcemaps": "^1.5.2",
 
-    "react": "^0.14.*",
-    "react-dom": "^0.14.*",
+    "react": "^15.0.0-rc.1",
+    "react-dom": "^15.0.0-rc.1",
     "babel-core": "^5.8.*",
     "react-jsx-anywhere": "^0.*",
+
+    "lodash": "^4.*",
     "jquery": "^2.1.*",
     "bootstrap": "^3.*",
-    "font-awesome": "^4.*",
-    "lodash": "^4.*",
-    "trumbowyg": "^2.*"
+    "font-awesome": "^4.*"
   }
 }

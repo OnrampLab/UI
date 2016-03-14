@@ -65,9 +65,8 @@ gulp.task('toAssets', function () {
     gulp.src('./node_modules/bootstrap/dist/**')    .pipe(gulp.dest("build/assets/bootstrap/"));
     gulp.src('./node_modules/font-awesome/css/**')  .pipe(gulp.dest("build/assets/font-awesome/css/"));
     gulp.src('./node_modules/font-awesome/fonts/**').pipe(gulp.dest("build/assets/font-awesome/fonts/"));
+    gulp.src('./node_modules/lodash/lodash.*')      .pipe(gulp.dest("build/assets/lodash/"));
     gulp.src('./node_modules/jquery/dist/*')        .pipe(gulp.dest("build/assets/jquery/"));
-    gulp.src('./node_modules/lodash/lodash.js')     .pipe(gulp.dest("build/assets/lodash/"));
-    gulp.src('./node_modules/trumbowyg/dist/**')     .pipe(gulp.dest("build/assets/trumbowyg/"));
 });
 
 // --------------------------------------------------------------------------------
