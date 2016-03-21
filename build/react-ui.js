@@ -1148,6 +1148,56 @@ ui.InputLabel = React.createClass({
 });
 'use strict';
 
+/**
+ *  InputDate
+ *
+ *      params:
+ *
+ *      code:
+ *          <InputText label="Label" name="name" id="id" maxLength="10" placeholder="placeholder" />
+ *
+ */
+var InputText = React.createClass({
+    displayName: 'InputText',
+
+    getInitialState: function getInitialState() {
+        return {
+            'label': this.props.label,
+            'name': this.props.name,
+            'id': this.props.id,
+            'max': this.props.maxLength,
+            'placeholder': this.props.placeholder
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleKey: function handleKey(event) {},
+
+    // --------------------------------------------------------------------------------
+    // render
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement(
+            'div',
+            { className: 'input-group input-group' },
+            React.createElement(
+                'span',
+                { className: 'input-group-addon', id: 'sizing-addon1' },
+                this.props.label
+            ),
+            React.createElement('input', { type: 'text', className: 'form-control', 'aria-describedby': 'sizing-addon1', name: this.props.name, id: this.props.id, onKeyUp: this.handleKey, maxLength: this.props.maxLength, placeholder: this.props.placeholder })
+        );
+    }
+
+});
+'use strict';
+
 var ui = ui || {};
 ui.Pagination = React.createClass({
     displayName: 'Pagination',
@@ -2061,6 +2111,49 @@ ui.Textarea = React.createClass({
 'use strict';
 
 /**
+ *  UploadControl
+ *
+ *      params:
+ *
+ *      code:
+ *          <UploadControl />
+ *
+ */
+
+var ui = ui || {};
+ui.UploadControl = React.createClass({
+    displayName: "UploadControl",
+
+    getDefaultProps: function getDefaultProps() {
+        return {};
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+
+    handleFile: function handleFile(e) {
+        if (this.props.listenFile) {
+            this.props.listenFile(e);
+        }
+    },
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+
+        return React.createElement("input", { type: "text", onChange: this.handleFile });
+    }
+});
+'use strict';
+
+/**
  *  Uploader
  *
  *      params:
@@ -2100,4 +2193,62 @@ ui.Uploader = React.createClass({
 
         return React.createElement("input", { type: "file", onChange: this.handleFile });
     }
+});
+'use strict';
+
+/**
+ *  WmsCustomer
+ *
+ *      params:
+ *
+ *      code:
+ *          <WmsCustomer />
+ *
+ */
+
+var ui = ui || {};
+ui.WmsCustomer = React.createClass({
+    displayName: 'WmsCustomer',
+
+    getInitialState: function getInitialState() {
+        return {
+            'name': this.props.name,
+            'dropClass': '',
+            'list': ['default1', 'default2']
+        };
+    },
+
+    // --------------------------------------------------------------------------------
+    // helper
+    // --------------------------------------------------------------------------------
+    getElementWidth: function getElementWidth() {
+        var dom = this.refs.labelinput;
+        return dom.offsetWidth;
+    },
+
+    setElementValue: function setElementValue(value) {
+        var dom = this.refs.labelinput;
+        dom.value = value;
+    },
+
+    getElementValue: function getElementValue() {
+        var dom = this.refs.labelinput;
+        return dom.value;
+    },
+
+    // --------------------------------------------------------------------------------
+    // event
+    // --------------------------------------------------------------------------------
+    handleChange: function handleChange(event) {},
+
+    handleClick: function handleClick(event) {},
+
+    // --------------------------------------------------------------------------------
+    // render
+    // Read only: readOnly=true
+    // --------------------------------------------------------------------------------
+    render: function render() {
+        return React.createElement('span', null);
+    }
+
 });
