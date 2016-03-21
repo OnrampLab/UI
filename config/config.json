@@ -17,6 +17,7 @@
         ["Image",   "Img",			    "src/Img"		       ],
         ["Message", "Info",             "src/Info"             ],
         ["Other",   "Pagination",       "src/Pagination"       ],
-        ["Other",   "Selection",        "src/Selection"        ]
+        ["Other",   "Selection",        "src/Selection"        ],
+        ["Other",   "PopupAlert",       "src/PopupAlert"       ]
     ]
 }
